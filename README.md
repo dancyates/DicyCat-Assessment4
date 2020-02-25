@@ -7,4 +7,4 @@ Assessment | GitHub Repository | Team Website
 1 | *None* | [Website](https://sites.google.com/york.ac.uk/dicycat/)
 2 | [View on GitHub](https://github.com/dancyates/DicyCat) | [Website](https://sites.google.com/york.ac.uk/dicycat/)
 3 | [View on GitHub](https://github.com/luket511/DicyCat-Assessment3) | [Website](https://dicycat.github.io/)
-4 | [View on GitHub](https://github.com/dancyates/DicyCat-Assessment4) | *Coming soon*
+4 | [View on GitHub](https://github.com/dancyates/DicyCat-Assessment4) | [Website](https://dicycat.github.io/)
