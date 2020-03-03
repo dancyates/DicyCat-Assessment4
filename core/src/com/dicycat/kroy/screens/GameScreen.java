@@ -24,6 +24,7 @@ import com.dicycat.kroy.debug.DebugRect;
 import com.dicycat.kroy.entities.*;
 import com.dicycat.kroy.gamemap.TiledGameMap;
 import com.dicycat.kroy.minigame.Minigame;
+import com.dicycat.kroy.misc.PowerUp;
 import com.dicycat.kroy.scenes.HUD;
 import com.dicycat.kroy.scenes.OptionsWindow;
 import com.dicycat.kroy.scenes.PauseWindow;
@@ -64,6 +65,10 @@ public class GameScreen implements Screen{
 	private PauseWindow pauseWindow;
 	private OptionsWindow optionsWindow;
 	private Minigame minigame;
+	//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+	private Integer aliensKilled;
+	private Vector2 lastAlienDeath;
+	//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 
 	// TRUCK_SELECT_CHANGE_11 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Slightly edited trucks statistics to make the game more balanced.
@@ -113,7 +118,10 @@ public class GameScreen implements Screen{
 		gameTimer = 60 * 15; //Set timer to 15 minutes
 		hud = new HUD(game.batch, gameTimer);
 		players = new ArrayList<>(); // Initialise the array which will contain the 4 fire trucks
-
+		//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+		aliensKilled = 0;
+		lastAlienDeath = Vector2.Zero;
+		//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
@@ -296,6 +304,12 @@ public class GameScreen implements Screen{
 			updateLives();
 		}
 		// TRUCK_SELECT_CHANGE_15 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+		//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+		if ((aliensKilled % 3) == 0){
+			gameObjects.add(new PowerUp(lastAlienDeath, new Texture("lightBlue.png"),new Vector2(40f,40f),1));
+		}
+		//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 
 	}
 
@@ -542,6 +556,17 @@ public class GameScreen implements Screen{
 		}
 		// TRUCK_SELECT_CHANGE_17 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	}
+
+	//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+	public void setLastAlienDeath(Vector2 location){
+		lastAlienDeath = location;
+	}
+	public void setAliensKilled(Integer killTotal){
+		aliensKilled=killTotal;
+	}
+	public Integer getAliensKilled(){return aliensKilled;}
+	//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
+
 	public HUD getHud(){
 		return hud;
 	}

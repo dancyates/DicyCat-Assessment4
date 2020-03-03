@@ -132,4 +132,22 @@ public class Alien extends Entity {
 			}
 		}
 	}
+	public void applyDamage(float damage) {
+		if (damage < 0){
+			throw new IllegalArgumentException("applyDamage(float damage) cannot be passed a negative float");
+		}
+		healthPoints -= damage;
+		if (healthPoints <= 0) {
+			die();
+		}
+	}
+
+	//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+	@Override
+	public void die() {
+		super.die();
+		Kroy.mainGameScreen.setAliensKilled(Kroy.mainGameScreen.getAliensKilled()+1);
+		Kroy.mainGameScreen.setLastAlienDeath(getPosition());
+	}
+	//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 }
