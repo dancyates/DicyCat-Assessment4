@@ -24,6 +24,7 @@ import com.dicycat.kroy.debug.DebugRect;
 import com.dicycat.kroy.entities.*;
 import com.dicycat.kroy.gamemap.TiledGameMap;
 import com.dicycat.kroy.minigame.Minigame;
+import com.dicycat.kroy.saving.GameSave;
 import com.dicycat.kroy.scenes.HUD;
 import com.dicycat.kroy.scenes.OptionsWindow;
 import com.dicycat.kroy.scenes.PauseWindow;
@@ -560,4 +561,12 @@ public class GameScreen implements Screen{
 		players.get(activeTruck).setSelected(true);
 	}
 	// TRUCK_SELECT_CHANGE_18 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+	
+	
+	public void saveGame() {
+		GameSave gameSave = new GameSave();
+		for (GameObject object : gameObjects){
+			gameSave.addGameObject(object);
+		}
+	}
 }
