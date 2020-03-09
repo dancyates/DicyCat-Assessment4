@@ -57,6 +57,7 @@ public class GameScreen implements Screen{
 	public GameScreenState state = GameScreenState.RUN;
 	
 	public static TiledGameMap gameMap;
+	public GameSave gameSave;
 	
 	private OrthographicCamera gamecam;	//follows along what the port displays
 	private Viewport gameport;
@@ -117,6 +118,24 @@ public class GameScreen implements Screen{
 
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+	public GameScreen(Kroy _game, List<GameObject> gameObjectsFromLoad){
+
+		game = _game;
+		gamecam = new OrthographicCamera();
+		gameport = new FitViewport(Kroy.width, Kroy.height, gamecam);	//Mic:could also use StretchViewPort to make the screen stretch instead of adapt
+		gameMap = new TiledGameMap();										//or FitPort to make it fit into a specific width/height ratio
+		pauseWindow = new PauseWindow(game);
+		pauseWindow.visibility(false);
+		optionsWindow = new OptionsWindow(game);
+		optionsWindow.visibility(false);
+
+		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
+
+		for (GameObject gObject : gameObjectsFromLoad) {
+			gameObjects.add(gObject);
+		}
+	}
 
 	/**
 	 * Initializes the screen which is first shown
@@ -180,6 +199,7 @@ public class GameScreen implements Screen{
 	public void render(float delta) {
 		Gdx.input.setInputProcessor(pauseWindow.stage);  //Set input processor
 		pauseWindow.stage.act();
+
 
 		switch (state) {
 			case RUN:
@@ -250,6 +270,7 @@ public class GameScreen implements Screen{
 				minigame.stage.act();
 				minigame.clickCheck();
 				break;
+
 			default:
 				break;
 		}
@@ -439,6 +460,7 @@ public class GameScreen implements Screen{
 		setGameState(GameScreenState.RESUME);
 	}
 
+
 	@Override
 	public void hide() {}
 
@@ -485,6 +507,16 @@ public class GameScreen implements Screen{
 	    	public void clicked(InputEvent event, float x, float y) {
 	    		dispose();
 	    		game.backToMenu();
+	    		return;
+	    	}
+	    });
+		//save button
+		pauseWindow.save.addListener(new ClickListener() {
+	    	@Override
+	    	public void clicked(InputEvent event, float x, float y) {
+
+	    		saveGame();
+
 	    		return;
 	    	}
 	    });
@@ -564,7 +596,8 @@ public class GameScreen implements Screen{
 	
 	
 	public void saveGame() {
-		GameSave gameSave = new GameSave();
+		gameSave = new GameSave();
+		gameSave.setSpawnPos(players.get(activeTruck).getPosition());
 		for (GameObject object : gameObjects){
 			gameSave.addGameObject(object);
 		}

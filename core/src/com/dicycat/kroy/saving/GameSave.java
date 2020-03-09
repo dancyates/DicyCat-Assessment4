@@ -2,20 +2,25 @@ package com.dicycat.kroy.saving;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.math.Vector2;
 import com.dicycat.kroy.GameObject;
 
 public class GameSave {
 	
 	private List<GameObject> gameObjects;
-	private static List<GameSave> currentSaves = new ArrayList<GameSave>();
-	
+	private Vector2 spawnPos;
+
 	public GameSave() {
 		gameObjects = new ArrayList<GameObject>();
-		currentSaves.add(this);
 	}
 
 	public List<GameObject> getGameObjects() {
 		return gameObjects;
+	}
+
+	public void setSpawnPos(Vector2 Pos){
+		this.spawnPos = Pos;
 	}
 
 	public void addGameObjects(List<GameObject> newGameObjects) {
@@ -24,10 +29,6 @@ public class GameSave {
 	
 	public void addGameObject(GameObject newGameObject) {
 		this.gameObjects.add(newGameObject);
-	}
-	
-	public List<GameSave> getCurrentSaves(){
-		return currentSaves;
 	}
 
 }
