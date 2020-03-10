@@ -9,6 +9,7 @@ import com.dicycat.kroy.GameObject;
 public class GameSave {
 	
 	private List<GameObject> gameObjects;
+	private List<GameObject> players;
 	private Vector2 spawnPos;
 
 	public GameSave() {

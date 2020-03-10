@@ -598,6 +598,7 @@ public class GameScreen implements Screen{
 	public void saveGame() {
 		gameSave = new GameSave();
 		gameSave.setSpawnPos(players.get(activeTruck).getPosition());
+
 		for (GameObject object : gameObjects){
 			gameSave.addGameObject(object);
 		}
