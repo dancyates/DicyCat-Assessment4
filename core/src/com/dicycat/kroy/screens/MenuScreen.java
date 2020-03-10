@@ -280,13 +280,26 @@ public class MenuScreen implements Screen{
 	 */
 	public void clickCheck() {
 		// TRUCK_SELECT_CHANGE_19 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+		// DicyCat Assessment 4 - Added functionality for level difficulty options
 		// Start Game Button click event
-		fireTruckSelector.startGameButton.addListener(new ClickListener() {
+		fireTruckSelector.startGameButtonEasy.addListener(new ClickListener() {
 			@Override
 	    	public void clicked(InputEvent event, float x, float y) {
-				startGame();// Starts game
+				startGame(0);// Starts game with extra health
 	    	}
 	    });
+		fireTruckSelector.startGameButtonMedium.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				startGame(1);// Starts game with standard values
+			}
+		});
+		fireTruckSelector.startGameButtonHard.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				startGame(2);// Starts game with decreased health
+			}
+		});
 
 		// Deleted click check events for the buttons which used to be used to select the firetruck you wanted.
 
@@ -299,10 +312,11 @@ public class MenuScreen implements Screen{
  	 */
 	// TRUCK_SELECT_CHANGE_20 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Removed unused parameters which were modified elsewhere
-	public void startGame() {
+	// DicyCat Assessment 4 - Added difficulty parameter
+	public void startGame(int difficulty) {
 		 if (!currentlyRunningGame) {	// Checks if a new GameScren is currently running and either makes one or ignores the commands
 			 currentlyRunningGame = true; // Makes sure that only one GameScreen is opened at once
-			 game.newGame(); // Calls the function in Kroy to start a new game
+			 game.newGame(difficulty); // Calls the function in Kroy to start a new game
 		 }
 	}
 	// TRUCK_SELECT_CHANGE_20 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
