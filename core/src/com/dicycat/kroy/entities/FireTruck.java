@@ -149,25 +149,21 @@ public class FireTruck extends Entity{
 				Kroy.mainGameScreen.updateCamera(); // Updates the screen position to always have the truck roughly centre
 			}
 			Kroy.mainGameScreen.updateCamera(); // Updates the screen position to always have the truck roughly centre
-
-			//player firing
-			ArrayList<GameObject> inRange = entitiesInRange();		//find list of enemies in range
-
-			if(inRange.isEmpty() || (currentWater<=0)){				//Removes the water stream if nothing is in range
-				firing=false;
-				water.setRemove(true);
-			}else if(!firing){					//Adds the water stream if something comes into range
-				water= new WaterStream(Vector2.Zero);
-				firing=true;
-				Kroy.mainGameScreen.addGameObject(water);		//initialises water as a WaterStream
-			}
-
-			if (firing) {					//if the player is firing runs the PlayerFire method
-				playerFire(inRange);
-			}
 		}
-		else {
+		//player firing
+		ArrayList<GameObject> inRange = entitiesInRange();		//find list of enemies in range
+
+		if(inRange.isEmpty() || (currentWater<=0)){				//Removes the water stream if nothing is in range
+			firing=false;
 			water.setRemove(true);
+		}else if(!firing){					//Adds the water stream if something comes into range
+			water= new WaterStream(Vector2.Zero);
+			firing=true;
+			Kroy.mainGameScreen.addGameObject(water);		//initialises water as a WaterStream
+		}
+
+		if (firing) {					//if the player is firing runs the PlayerFire method
+			playerFire(inRange);
 		}
 		// TRUCK_SELECT_CHANGE_7 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		
