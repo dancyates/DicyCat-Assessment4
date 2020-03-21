@@ -38,6 +38,9 @@ public class FireTruck extends Entity{
 
 	protected final HashMap<String,Integer> DIRECTIONS = new HashMap<String,Integer>(); // Dictionary to store the possible directions the truck can face based on a key code created later
 	protected final int[] ARROWKEYS = {Keys.UP, Keys.DOWN, Keys.RIGHT, Keys.LEFT}; // List of the arrow keys to be able to iterate through them later on
+	// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
+	protected final int[] LETTERKEYS = {Keys.W, Keys.S, Keys.D, Keys.A}; // List of the letter keys for alternative movement
+	// End of modification - Alternative Movement Controls 2.4
 	protected Integer direction = 0; // Direction the truck is facing
 
 	private WaterStream water;
@@ -115,11 +118,13 @@ public class FireTruck extends Entity{
 			String directionKey = ""; 
 			String[] directionKeys = {"n", "s", "e", "w"}; // alphabet of directionKey
 
+			// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
 			for (int i = 0; i <= 3; i++) {// loops through the 4 arrow keys (Stored as KEYS above)
-				if (Gdx.input.isKeyPressed(ARROWKEYS[i])) {
+				if (Gdx.input.isKeyPressed(ARROWKEYS[i]) || Gdx.input.isKeyPressed(LETTERKEYS[i])) {
 					directionKey+=directionKeys[i];
 				}
 			}
+			// End of modification - Alternative Movement Controls 2.4
 
 			if (directionKey.contains("ns")) {// makes sure direction doesn't change if both up and down are pressed
 				directionKey = directionKey.substring(2);
@@ -139,10 +144,16 @@ public class FireTruck extends Entity{
 		// TRUCK_SELECT_CHANGE_7 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		// Only allows the truck to move, control the camera and attack if selected
 		if (selected) {
+			// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
 			if (Gdx.input.isKeyPressed(ARROWKEYS[0]) ||
 					Gdx.input.isKeyPressed(ARROWKEYS[1]) ||
 					Gdx.input.isKeyPressed(ARROWKEYS[2]) ||
-					Gdx.input.isKeyPressed(ARROWKEYS[3])) { // Runs movement code if any arrow key pressed
+					Gdx.input.isKeyPressed(ARROWKEYS[3]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[0]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[1]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[2]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[3])) { // Runs movement code if any arrow key pressed
+				// End of modification - Alternative Movement Controls 2.4
 
 				direction = updateDirection(); // updates direction based on current keyboard input
 				moveInDirection(); // moves in the direction previously specified
