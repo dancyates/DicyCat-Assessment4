@@ -48,7 +48,6 @@ public class PauseWindow {
 	    table.add(exit).width(Kroy.CentreWidth());
 	    table.row();
 	    table.add(save).width(Kroy.CentreWidth());
-	    
 		table.setFillParent(true);
 	    stage.addActor(table);
 	}

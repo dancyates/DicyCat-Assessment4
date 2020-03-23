@@ -1,5 +1,5 @@
 package com.dicycat.kroy.screens;
-  
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -16,11 +16,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
 import com.dicycat.kroy.misc.Button;
+import com.dicycat.kroy.saving.GameSave;
 import com.dicycat.kroy.scenes.ControlsWindow;
 import com.dicycat.kroy.scenes.FireTruckSelectionScene;
 import com.dicycat.kroy.minigame.Minigame;
 import com.dicycat.kroy.scenes.OptionsWindow;
-  
+import com.dicycat.kroy.scenes.SaveWindow;
+
+import static com.dicycat.kroy.scenes.SaveWindow.saveButtons;
+
 /**
  * Main Menu screen
  * 
@@ -62,9 +66,9 @@ public class MenuScreen implements Screen{
   // CONTROL_SCREEN_ 2 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
   	// creating an instance of the ControlsWindow class
   private ControlsWindow controlsWindow; 
-  // CONTROL_SCREEN_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+// CONTROL_SCREEN_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+  private SaveWindow loadWindow;
 
-  
   public static Music music = Gdx.audio.newMusic(Gdx.files.internal("gamemusic.mp3"));
   public static float musicVolume = 0.4f;
 
@@ -101,13 +105,14 @@ public class MenuScreen implements Screen{
 	  OPTIONS,
 	  MINIGAME,
 	  // CONTROL_SCREEN_4 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
-	  CONTROLS // adding a new window state, the controls window, has the code that calls the creation and setup of the controls window
+	  CONTROLS, // adding a new window state, the controls window, has the code that calls the creation and setup of the controls window
 	  // CONTROL_SCREEN_4 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+	  LOAD //New state for the load screen
   }
   
   public MenuScreenState state = MenuScreenState.MAINMENU;
 
-  public MenuScreen(Kroy game) { 
+  public MenuScreen(Kroy game) {
 	  this.game = game; 
 	  exitButtonTexture = new Texture("EXIT.png"); 	//in later stages we could also have buttonActive and buttonInactive
 	  exitButtonActiveTexture = new Texture("exitActive.png");
@@ -140,6 +145,9 @@ public class MenuScreen implements Screen{
 	  optionsWindow = new OptionsWindow(game);
 	  optionsWindow.visibility(false);
 
+	  loadWindow = new SaveWindow(game);
+	  loadWindow.visibility(false);
+
 	  minigame = new Minigame(game, false);
 	  minigame.visibility(false);
 	  
@@ -160,6 +168,7 @@ public class MenuScreen implements Screen{
 	  
 	  switch(state) {
 		  case MAINMENU: // Display all buttons and the main menu
+
 
 			  stage.act();	//allows the stage to interact with user input
 			  
@@ -216,7 +225,8 @@ public class MenuScreen implements Screen{
 
 			  Button loadButton = new Button(loadButtonY,loadButtonTexture,loadButtonTexture,game);
 			  if (loadButton.buttonAction()) {
-				  System.out.println("test babey");
+				  loadWindow.update();
+				  setGameState(MenuScreenState.LOAD);
 			  }
 			  // REFACTOR_CHANGE_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER --------------------------------------------------------------------
 			 
@@ -267,7 +277,18 @@ public class MenuScreen implements Screen{
 		  	  controlsWindow.clickCheck(); // constantly check for user inputs from the mouse
 		  	  break;
 		  // CONTROL_SCREEN_7 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER --------------------------------------------------------------------
+
+		  case LOAD:
+
+			  Gdx.input.setInputProcessor(loadWindow.stage);
+			  loadWindow.visibility(true);
+			  loadWindow.stage.act();
+			  loadWindow.stage.draw();
+			  loadClickCheck();
+			  break;
 		  }
+
+
   	}
 
 	public void setGameState(MenuScreenState state){
@@ -306,6 +327,20 @@ public class MenuScreen implements Screen{
 		// TRUCK_SELECT_CHANGE_19 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	}
 
+	private void loadClickCheck (){
+
+
+		for (int i = 0; i <= 2; i++) {
+			final int finalI = i;
+			saveButtons.get(i).addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					startGame(GameSave.getSavedGames().get(finalI));
+				}
+			});
+		}
+	}
+
 
 	/**
 	 * If the game isn't currently running, creates a new game
@@ -320,6 +355,13 @@ public class MenuScreen implements Screen{
 		 }
 	}
 	// TRUCK_SELECT_CHANGE_20 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+	public void startGame(GameSave gameSave){
+		if (!currentlyRunningGame) {	// Checks if a new GameScren is currently running and either makes one or ignores the commands
+			currentlyRunningGame = true; // Makes sure that only one GameScreen is opened at once
+			game.newGame(gameSave); // Calls the function in Kroy to start a new game
+		}
+	}
 
   public void setCurrentlyRunningGame(boolean state) {
 	  currentlyRunningGame = state;
