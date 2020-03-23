@@ -13,7 +13,7 @@ import com.dicycat.kroy.gamemap.TiledGameMap;
  *
  */
 public abstract class Entity extends GameObject{
-	protected int healthPoints;
+	protected int currentHealthPoints;
 	protected int radius;
 	protected int maxHealthPoints;
 
@@ -27,7 +27,7 @@ public abstract class Entity extends GameObject{
 	// Added radius to entity constructor to be able to change the value from the hardcoded 500.
 	public Entity(Vector2 spawnPos, Texture img, Vector2 imSize,int health, int radius) {
 		super(spawnPos, img, imSize);
-		healthPoints = health;
+		currentHealthPoints = health;
 		maxHealthPoints = health;
 		this.radius = radius;
 		// RANGE - END OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
@@ -45,7 +45,7 @@ public abstract class Entity extends GameObject{
 	 * @return alive Is health above 0 and is not marked for removal
 	 */
 	public Boolean isAlive() {
-		return (healthPoints > 0) && !remove;
+		return (currentHealthPoints > 0) && !remove;
 	}
 
 	/**
@@ -56,8 +56,8 @@ public abstract class Entity extends GameObject{
 		if (damage < 0){
 			throw new IllegalArgumentException("applyDamage(float damage) cannot be passed a negative float");
 		}
-		healthPoints -= damage;
-		if (healthPoints <= 0) {
+		currentHealthPoints -= damage;
+		if (currentHealthPoints <= 0) {
 			die();
 		}
 	}
@@ -75,7 +75,7 @@ public abstract class Entity extends GameObject{
 		}
 	}
 	
-	public int getHealthPoints(){
-		return healthPoints;
+	public int getCurrentHealthPoints(){
+		return currentHealthPoints;
 	}
 }

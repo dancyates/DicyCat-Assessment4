@@ -76,14 +76,18 @@ public class Alien extends Entity {
 				setPosition(new Vector2(moveAlongPatrol(waypoints[currentWaypoint])));
 		}
 
+		//PowerUpAddition_Invisibility_4 - Start of Modification - DicyCat - Luke Taylor
+		
 		// If player in radius then shoots bullets towards them
 		Bullet[] toShoot = dispenser.update(playerInRadius());
-		if (toShoot != null) {
+		if (toShoot != null && Kroy.mainGameScreen.isPlayerVisible()) { // CHANGE : This line is changed to check that the player is visible
 			for (Bullet bullet : toShoot) {
 				bullet.fire(getCentre());
 				Kroy.mainGameScreen.addGameObject(bullet);
 			}
 		}
+		
+		//PowerUpAddition_Invisibility_4 - End of Modification - DicyCat - Luke Taylor
 	}
 
 	/**
@@ -136,8 +140,8 @@ public class Alien extends Entity {
 		if (damage < 0){
 			throw new IllegalArgumentException("applyDamage(float damage) cannot be passed a negative float");
 		}
-		healthPoints -= damage;
-		if (healthPoints <= 0) {
+		currentHealthPoints -= damage;
+		if (currentHealthPoints <= 0) {
 			die();
 		}
 	}

@@ -78,7 +78,11 @@ public class GameScreen implements Screen{
 			{300f, 1f, 500f, 300f},		//Capacity
 			{300f, 1f, 400f, 450f}		//Range
 		};
-
+	
+	//PowerUpAddition_Invisibility_1 - Start of Modification - DicyCat - Luke Taylor
+	private boolean playerVisible = true;	
+	//PowerUpAddition_Invisibility_1 - End of Modification - DicyCat - Luke Taylor
+	
 	// Changes variable of truckNum to activeTruck
 	private int activeTruck; // Identifies the truck that is currently selected
 	// Deleted the variable player and replaced it with an ArrayList containing the 4 trucks and named it players
@@ -274,6 +278,17 @@ public class GameScreen implements Screen{
 	 * Respawns the player if necessary.
 	 */
 	private void updateLoop() {
+		
+		//Temp
+		int[] keys = {Keys.NUM_0,Keys.NUM_1,Keys.NUM_2,Keys.NUM_3,Keys.NUM_4,Keys.NUM_5,Keys.NUM_6,Keys.NUM_7};
+		for (int i = 0; i < 8; i++ ) {
+			if (Gdx.input.isKeyJustPressed(keys[i])) {
+				spawnPowerUp(i);
+			}
+		}
+		
+		//Temp
+		
 		List<GameObject> toRemove = new ArrayList<GameObject>();
 		for (GameObject gObject : gameObjects) {	//Go through every game object
 			gObject.update();						//Update the game object
@@ -305,13 +320,20 @@ public class GameScreen implements Screen{
 		}
 		// TRUCK_SELECT_CHANGE_15 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
-		//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
-		if ((aliensKilled % 3) == 0){
-			gameObjects.add(new PowerUp(lastAlienDeath, new Texture("lightBlue.png"),new Vector2(40f,40f),1));
+		//Aliens_Killed_Change_1 - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+		if (((aliensKilled % 3) == 0) && (aliensKilled > 0)){
+			spawnPowerUp();
 		}
-		//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
+		//Aliens_Killed_Change_1 - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 
 	}
+
+
+	//PowerUpGain1 - Start of Modification - DicyCat - Luke Taylor
+	public void gainPowerUp(int type){
+		getPlayer().obtainPowerUp(type);
+	}
+	//PowerUpGain1 - End of Modification - DicyCat - Luke Taylor
 
 	/**
 	 * Renders the objects in "objectsToRender" then clears the list
@@ -330,6 +352,19 @@ public class GameScreen implements Screen{
 	public void addGameObject(GameObject gameObject) {
 		objectsToAdd.add(gameObject);
 	}
+
+	//Aliens_Killed_Change_2 - Start of Modification - DICYCAT - Luke Taylor
+	public void spawnPowerUp(){
+		int type = PowerUp.generatePowerUpType();
+		gameObjects.add(new PowerUp(lastAlienDeath, textures.getActivePowerUp(type), type));
+	}
+	
+	
+	public void spawnPowerUp(int type) {
+		gameObjects.add(new PowerUp(getPlayer().getPosition().add(0, 100), textures.getActivePowerUp(type-1), type-1));
+		
+	}
+	//Aliens_Killed_Change_2 - End of Modification - DICYCAT - Luke Taylor
 
 	/**
 	 * Allows external classes to access the player
@@ -358,7 +393,7 @@ public class GameScreen implements Screen{
 					object.getHeight()/10);
 		} // Draws the fortresses and patrols to a minimap scaled down to the in the bottom left corner.
 		for (FireTruck truck : players) {
-			if (truck.getHealthPoints() > 0) {
+			if (truck.getCurrentHealthPoints() > 0) {
 				game.batch.draw(truck.getTexture(), truck.getX() / 19, truck.getY() / 19, 20, 25);
 			}
 			//Draws the firetrucks on their relative position on the minimap. size is not to scale to make their position obvious and clear.
@@ -574,6 +609,24 @@ public class GameScreen implements Screen{
 	public Vector2 getSpawnPosition() {
 		return spawnPosition;
 	}
+	
+	//PowerUpAddition_Invisibility_2 - Start of Modification - DicyCat - Luke Taylor
+	/**
+	 * Sets player visibility
+	 * @param result boolean of if player is visible or not
+	 */
+	public void setPlayerVisible(boolean result) {
+		playerVisible = result;
+	}
+	
+	/**
+	 * Getter for playerVisible
+	 * @return boolean if player is visible or not
+	 */
+	public boolean isPlayerVisible() {
+		return playerVisible;
+	}
+	//PowerUpAddition_Invisibility_2 - End of Modification - DicyCat - Luke Taylor
 
 
 	// TRUCK_SELECT_CHANGE_18 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
