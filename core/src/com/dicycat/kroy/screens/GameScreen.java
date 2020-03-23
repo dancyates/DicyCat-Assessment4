@@ -48,6 +48,7 @@ public class GameScreen implements Screen{
 	public Kroy game;
 	public GameTextures textures;
 	public static Boolean showDebug = false;
+	private int difficulty; //Difficulty option chosen
 	public float gameTimer; //Timer to destroy station.
 	// MINIMAP_1 - START OF MODIFICATION - NP STUDIOS - BETHANY GILMORE
 	private Texture minimap = new Texture("YorkMap.png"); // A .png version of the tilemap background to use as the background texture for the minimap.
@@ -91,7 +92,8 @@ public class GameScreen implements Screen{
 
 	// TRUCK_SELECT_CHANGE_12 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Removed truckNum from constructor parameters
-	public GameScreen(Kroy _game) {
+	// DicyCat Assessment 4 - Added difficulty parameter
+	public GameScreen(Kroy _game, int difficulty) {
 		// END_GAME_FIX_1 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		fortressesCount = 6; // Initialize fortress count to 6
 		// END_GAME_FIX_1 - END OF MODIFICATION - NP STUDIOS
@@ -103,8 +105,6 @@ public class GameScreen implements Screen{
 		pauseWindow.visibility(false);
 		optionsWindow = new OptionsWindow(game);
 		optionsWindow.visibility(false);
-//		minigame = new Minigame(game);
-//		minigame.visibility(false);
 		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
 		// FIRESTATION_RANGE_FIX_1 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		// Edited coordinate so firestation is in the middle of the square
@@ -113,6 +113,14 @@ public class GameScreen implements Screen{
 		gameTimer = 60 * 15; //Set timer to 15 minutes
 		hud = new HUD(game.batch, gameTimer);
 		fireTrucks = new ArrayList<>(); // Initialise the array which will contain the 4 fire trucks
+
+		// DicyCat Assessment 4 - Modify trucks health by difficulty
+		this.difficulty = difficulty;
+		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
+		healthModifier /= 2; //Reduce the impact to the desired amount
+		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
+			truckStats[i][0] += truckStats[i][0] * healthModifier;	//Modify truck health
+		}
 
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
@@ -519,7 +527,7 @@ public class GameScreen implements Screen{
 	 * @param won Did the player reach the win state?
 	 */
 	public void gameOver(boolean won) {
-		game.setScreen(new GameOverScreen(game, activeTruck, won));
+		game.setScreen(new GameOverScreen(game, activeTruck, won, difficulty));
 	}
 
 	/**

@@ -36,8 +36,13 @@ public class FireTruckSelectionScene {
     public Label truck2 = new Label("Damage", skin);
     public Label truck3 = new Label("Capacity", skin);
     public Label truck4 = new Label("Range", skin);
-	public TextButton startGameButton = new TextButton("Start Game", skin);
 	// TRUCK_SELECT_CHANGE_9 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+	// DicyCat Assessment 4 - Split start button into 3 options to allow for difficulty selection
+	public TextButton startGameButtonEasy = new TextButton("Start Game (Easy)", skin);
+	public TextButton startGameButtonMedium = new TextButton("Start Game (Medium)", skin);
+	public TextButton startGameButtonHard = new TextButton("Start Game (Hard)", skin);
+
     private float width = Gdx.graphics.getWidth();
     private float centre = width* 0.7f;
 
@@ -68,12 +73,17 @@ public class FireTruckSelectionScene {
 	    table.add(truck2).width(centre/3.0f).pad(0,0,50,0);
 	    table.add(truck3).width(centre/3.0f).pad(0,0,50,0);
 	    table.add(truck4).width(centre/3.0f).pad(0,0,50,0);
+		// TRUCK_SELECT_CHANGE_10 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
 	    table.row(); // Added a new row to the table
 
-		// Added the startGameButton to the table and centered it in the table.
-	    table.add(startGameButton).width(centre/2.0f).colspan(4);
-		// TRUCK_SELECT_CHANGE_10 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+		// DicyCat Assessment 4 - Added the startGameButton options to the table and centered it in the table.
+	    table.add(startGameButtonEasy).width(centre/2.0f).colspan(4);
+		table.row();
+		table.add(startGameButtonMedium).width(centre/2.0f).colspan(4);
+		table.row();
+		table.add(startGameButtonHard).width(centre/2.0f).colspan(4);
+		table.row();
 	    
 		table.setFillParent(true);
 	    stage.addActor(table);
