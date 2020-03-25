@@ -99,7 +99,7 @@ public class Fortress extends Entity {
 	@Override
 	public void update() {
 		//weapons
-		Bullet[] toShoot = dispenser.update(playerInRadius());
+		Bullet[] toShoot = dispenser.update(truckInRadius());
 		if (toShoot != null) {
 			for (Bullet bullet : toShoot) {
 				bullet.fire(getCentre());

@@ -77,7 +77,7 @@ public class Alien extends Entity {
 		}
 
 		// If player in radius then shoots bullets towards them
-		Bullet[] toShoot = dispenser.update(playerInRadius());
+		Bullet[] toShoot = dispenser.update(truckInRadius());
 		if (toShoot != null) {
 			for (Bullet bullet : toShoot) {
 				bullet.fire(getCentre());

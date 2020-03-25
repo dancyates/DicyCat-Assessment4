@@ -66,13 +66,25 @@ public abstract class Entity extends GameObject{
 	 * Checks if the player is within the radius of the Entity
 	 * @return playerInRadius
 	 */
-	protected Boolean playerInRadius() {
-		Vector2 currentCoords = Kroy.mainGameScreen.getPlayer().getCentre(); // get current player coordinates
-		if (Vector2.dst(currentCoords.x, currentCoords.y, getCentre().x, getCentre().y) < radius ) { // checks the distance between the two entities
-			return true; // returns true if distance between entity and player is less than radius of item
-		}else {
-			return false; // returns false otherwise
+	protected Boolean truckInRadius() {
+		//INTERACTIVITY - START OF MODIFICATION - DICYCAT - Isaac Albiston----
+		for (GameObject currentTruck : Kroy.mainGameScreen.getTrucks()) {        //iterates through all trucks
+			Vector2 currentCoords = currentTruck.getCentre(); // get current truck coordinates
+			if (Vector2.dst(currentCoords.x, currentCoords.y, getCentre().x, getCentre().y) < radius) { // checks the distance between the two entities
+				return true; // returns true if distance between entity and player is less than radius of item
+			}
 		}
+		return false; // returns false otherwise
+	}
+
+	protected Boolean playerInRadius() {
+			Vector2 currentCoords = Kroy.mainGameScreen.getPlayer().getCentre(); // get current truck coordinates
+			if (Vector2.dst(currentCoords.x, currentCoords.y, getCentre().x, getCentre().y) < radius) { // checks the distance between the two entities
+				return true; // returns true if distance between entity and player is less than radius of item
+			}
+
+		return false; // returns false otherwise
+		//INTERACTIVITY - END OF MODIFICATION - DICYCAT - Isaac Albiston----
 	}
 	
 	public int getHealthPoints(){
