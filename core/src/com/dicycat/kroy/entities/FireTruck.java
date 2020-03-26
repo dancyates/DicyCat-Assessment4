@@ -22,7 +22,7 @@ import com.dicycat.kroy.screens.GameScreen;
 /**
  * GameObject controlled controlled by the player which automatically fires
  * at hostile enemies when they're within range.
- * 
+ *
  * @author Riju De
  * @author Luke Taylor
  */
@@ -40,45 +40,48 @@ public class FireTruck extends Entity{
 	//PowerUpAddition_Teleportation_1 - Start of modification - DicyCat - Luke Taylor
 	private Vector2 spawnPoint;
 	//PowerUpAddition_Teleportation_1 - End of Modification - DicyCat - Luke Taylor
-	
+
 	//PowerUpAddition_General_1 - Start of Modification - DicyCat - Luke Taylor
 	private int selectedPowerUp = 0;
-	
+
 	enum PowerUp{
 		OBTAINED, ACTIVE, NULL;
-		
+
 		private float activeLength = 10f, currentTime = 0f;
-		
-		
+
+
 		public void updateTimer() {
 			currentTime += Gdx.graphics.getDeltaTime();
 		}
-		
+
 		public boolean hasEnded() {
 			return (currentTime >= activeLength);
 		}
-		
+
 		public void resetTimer() {
 			currentTime = 0f;
 		}
-		
+
 	}
-	
+
 	private PowerUp[] powerUps = {
-			PowerUp.NULL,				//1 powerUps[0] - Boolean for invincibility - Done tested informally			
-			PowerUp.NULL,				//2 powerUps[1] - Multiple attacks - Done tested informally								
-			PowerUp.NULL,				//3 powerUps[2] - Damage increase	 - Done	tested informally								
-			PowerUp.NULL,				//4 powerUps[3] - Smaller Truck - Done tested informally												
-			PowerUp.NULL,				//5 powerUps[4] - Health/water regen - Done tested informally										
-			PowerUp.NULL,				//6 powerUps[5] - invisibility from patrols but not fortresses 			
+			PowerUp.NULL,				//1 powerUps[0] - Boolean for invincibility - Done tested informally
+			PowerUp.NULL,				//2 powerUps[1] - Multiple attacks - Done tested informally
+			PowerUp.NULL,				//3 powerUps[2] - Damage increase	 - Done	tested informally
+			PowerUp.NULL,				//4 powerUps[3] - Smaller Truck - Done tested informally
+			PowerUp.NULL,				//5 powerUps[4] - Health/water regen - Done tested informally
+			PowerUp.NULL,				//6 powerUps[5] - invisibility from patrols but not fortresses
 			PowerUp.NULL,				//7 powerUps[6] - Teleportation (return to station instantly) - Done and tested informally
 	};
-	
+
 	//PowerUpAddition_General_1 - End of Modification - Luke Taylor
-	
-	
+
+
 	protected final HashMap<String,Integer> DIRECTIONS = new HashMap<String,Integer>(); // Dictionary to store the possible directions the truck can face based on a key code created later
 	protected final int[] ARROWKEYS = {Keys.UP, Keys.DOWN, Keys.RIGHT, Keys.LEFT}; // List of the arrow keys to be able to iterate through them later on
+	// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
+	protected final int[] LETTERKEYS = {Keys.W, Keys.S, Keys.D, Keys.A}; // List of the letter keys for alternative movement
+	// End of modification - Alternative Movement Controls 2.4
 	protected Integer direction = 0; // Direction the truck is facing
 
 	private WaterStream water, secondStream;
@@ -93,7 +96,7 @@ public class FireTruck extends Entity{
 		//PowerUpAddition_Teleportation_2 - Start of modification - DicyCat - Luke Taylor
 		spawnPoint = spawnPos;
 		//PowerUpAddition_Teleportation_2 - End of modification - DicyCat - Luke Taylor
-		
+
 		DIRECTIONS.put("n",0);			//North Facing Direction (up arrow)
 		DIRECTIONS.put("w",90);			//West Facing Direction (left arrow)
 		DIRECTIONS.put("s",180);		//South Facing Direction (down arrow)
@@ -157,8 +160,8 @@ public class FireTruck extends Entity{
 			}
 		}
 		//PowerUpAddition_Teleportation_3 - End of Modification - DicyCat - Luke Taylor
-		
-		
+
+
 		setRotation(direction);// updates truck direction
 	}
 
@@ -166,15 +169,17 @@ public class FireTruck extends Entity{
 	 * Method checks if any arrow keys currently pressed and then converts them into a integer direction
 	 * @return Direction to follow
 	 */
-	public Integer updateDirection() { 
-			String directionKey = ""; 
+	public Integer updateDirection() {
+			String directionKey = "";
 			String[] directionKeys = {"n", "s", "e", "w"}; // alphabet of directionKey
 
+			// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
 			for (int i = 0; i <= 3; i++) {// loops through the 4 arrow keys (Stored as KEYS above)
-				if (Gdx.input.isKeyPressed(ARROWKEYS[i])) {
+				if (Gdx.input.isKeyPressed(ARROWKEYS[i]) || Gdx.input.isKeyPressed(LETTERKEYS[i])) {
 					directionKey+=directionKeys[i];
 				}
 			}
+			// End of modification - Alternative Movement Controls 2.4
 
 			if (directionKey.contains("ns")) {// makes sure direction doesn't change if both up and down are pressed
 				directionKey = directionKey.substring(2);
@@ -191,16 +196,24 @@ public class FireTruck extends Entity{
 	 * its hitbox and checks if any entity is inside its range.
 	 */
 	public void update(){
-	
+
 		// TRUCK_SELECT_CHANGE_7 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		// Only allows the truck to move, control the camera and attack if selected
 		if (selected) {
-			if (Gdx.input.isKeyPressed(ARROWKEYS[0]) ||	Gdx.input.isKeyPressed(ARROWKEYS[1]) ||
-					Gdx.input.isKeyPressed(ARROWKEYS[2]) ||	Gdx.input.isKeyPressed(ARROWKEYS[3]) ||// Runs movement code if any arrow key pressed or if the teleporation powerup has been activated
+			// Alternative Movement Controls 2.4 - START OF MODIFICATION - DicyCat Assessment 4 - Riju De----
+			if (Gdx.input.isKeyPressed(ARROWKEYS[0]) ||
+					Gdx.input.isKeyPressed(ARROWKEYS[1]) ||
+					Gdx.input.isKeyPressed(ARROWKEYS[2]) ||
+					Gdx.input.isKeyPressed(ARROWKEYS[3]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[0]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[1]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[2]) ||
+					Gdx.input.isKeyPressed(LETTERKEYS[3])||// Runs movement code if any arrow key pressed or if the teleporation powerup has been activated
+
 					//PowerUpAddition_Teleportation_4 - Start of Modification - DicyCat - Luke Taylor
-					powerUps[6] == PowerUp.ACTIVE
-					//PowerUpAddition_Teleportation_4 - End of Modification - DicyCat - Luke Taylor
-					) { 
+					powerUps[6] == PowerUp.ACTIVE) {
+					//PowerUpAddition_Teleportation_4 - End of Modification - DicyCat - Luke Taylor) { // Runs movement code if any arrow key pressed
+				// End of modification - Alternative Movement Controls 2.4
 
 				direction = updateDirection(); // updates direction based on current keyboard input
 				moveInDirection(); // moves in the direction previously specified
@@ -222,9 +235,9 @@ public class FireTruck extends Entity{
 			}
 			//FiringSystemRefactor - End of Modification - DicyCat - Luke Taylor
 
-			
+
 			//PowerUpAddition_MultipleAttacks_4 - Start of Modification - DicyCat - Luke Taylor
-			
+
 			switch(powerUps[1]) {
 			case ACTIVE:
 				if (secondStreamFiring) {
@@ -237,17 +250,29 @@ public class FireTruck extends Entity{
 				secondStream.removeStream(); // Dont display second stream when powerup not active
 				break;
 			}
-			
+
 			//PowerUpAddition_MultipleAttacks_4 - End of Modification - DicyCat - Luke Taylor
-			
+
 		}
-		else {
+		//player firing
+		ArrayList<GameObject> inRange = entitiesInRange();		//find list of enemies in range
+
+		if(inRange.isEmpty() || (currentWaterLevel<=0)){				//Removes the water stream if nothing is in range
+			firing=false;
 			water.setRemove(true);
+		}else if(!firing){					//Adds the water stream if something comes into range
+			water= new WaterStream(Vector2.Zero);
+			firing=true;
+			Kroy.mainGameScreen.addGameObject(water);		//initialises water as a WaterStream
+		}
+
+		if (firing) {					//if the player is firing runs the PlayerFire method
+			playerFire(inRange);
 		}
 		// TRUCK_SELECT_CHANGE_7 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
-		
+
 		//PowerUpAddition_Regen_1 - Start of Modification - DicyCat - Luke Taylor
-		
+
 		switch(powerUps[4]) {
 		case ACTIVE:
 			currentHealthPoints = maxHealthPoints;
@@ -257,20 +282,20 @@ public class FireTruck extends Entity{
 		default:
 			break;
 		}
-		
+
 		//PowerUpAddition_Regen_1 - End of Modification - DicyCat - Luke Taylor
-		
-		
+
+
 		//PowerUpAddition_SmallerTruck_1 - Start of modification - DicyCat - Luke Taylor
         switch(powerUps[3]) {
         case ACTIVE:
         	hitbox.set(hitbox.x, hitbox.y, 10, 10);
         	sprite.setBounds(getX(), getY(), 12.5f, 25f);
-        	
+
 			//water bar update
 			tank.setPosition(getCentre().add(-5,20));
 			tank.setBarDisplay((currentWaterLevel/maxWaterLevel)*50);
-	
+
 			//Health bar update
 			healthBar.setPosition(getCentre().add(-5,25));
 			healthBar.setBarDisplay((currentHealthPoints*50)/maxHealthPoints);
@@ -278,22 +303,22 @@ public class FireTruck extends Entity{
 		default:
     		hitbox.set(hitbox.x,hitbox.y,20,20);
     		sprite.setBounds(getX(), getY(), 25, 50);
-    		
+
 			//water bar update
 			tank.setPosition(getCentre().add(0,20));
 			tank.setBarDisplay((currentWaterLevel/maxWaterLevel)*50);
-	
+
 			//Health bar update
 			healthBar.setPosition(getCentre().add(0,25));
 			healthBar.setBarDisplay((currentHealthPoints*50)/maxHealthPoints);
 			break;
         }
         //PowerUpAddition_SmallerTruck_1 - End of modification - DicyCat - Luke Taylor
-        
-		//Move the hit box to it's new centred position according to the sprite's position.
-        hitbox.setCenter(getCentre().x, getCentre().y);       
 
-        
+		//Move the hit box to it's new centred position according to the sprite's position.
+        hitbox.setCenter(getCentre().x, getCentre().y);
+
+
         //PowerUpAddition_Invisibility_3 - Start of Modification - DicyCat - Luke Taylor
         if (selected) {
 			switch(powerUps[5]) {
@@ -306,19 +331,19 @@ public class FireTruck extends Entity{
 			}
         }
         //PowerUpAddition_Invisibility_3 - End of Modification - DicyCat - Luke Taylor
-		   
-        
+
+
 		//PowerUpAddition_General_3 - Start of Modification - DicyCat - Luke Taylor
-		
+
 		if (Gdx.input.isKeyJustPressed(Keys.TAB)) { // Checks if Tab is pressed to toggle to next power up
 			selectNextPowerUpType();
 		}
 		if(Gdx.input.isKeyJustPressed(Keys.SPACE)) { // Checks if space is pressed to activate a power up
 			usePowerUp();
 		}
-		
+
 		for (int i: new int[] {0,1,2,3,4,5,6}) { // This loop checks the state of all the power up every loop. It makes sure their timers are always counting down if they are active
-			switch (powerUps[i]){					
+			switch (powerUps[i]){
 				case ACTIVE:
 					powerUps[i].updateTimer();
 					if (powerUps[i].hasEnded()) {
@@ -330,11 +355,11 @@ public class FireTruck extends Entity{
 				break;
 			}
 		}
-		
+
 		//PowerUpAddition_General_3 - End of Modificiation - DicyCat - Luke Taylor
 
 	}
-	
+
 
 	//PowerUpAddition_MultipleAttack_1 - Start of Modification - DicyCat - Luke Taylor
 	public Entity getNearestEnemy(ArrayList<GameObject> targets) {
@@ -347,22 +372,22 @@ public class FireTruck extends Entity{
 				nearestEnemy=targets.get(i);
 			}
 		}
-		
+
 		return (Entity) nearestEnemy;
 	}
 	//PowerUpAddition_MulipleAttack_1 - End of Modification - DicyCat - Luke Taylor
-	
-	
+
+
 	/**
 	 * Find and aim at the nearest target from an ArrayList of GameObjects
 	 * @param targets the list of targets within the firetrucks ranged
 	 */
 	private void playerFire(ArrayList<GameObject> targets) {		//Method to find and aim at the nearest target from an ArrayList of Gameobjects
-		
+
 		//PowerUpAddition_MultipleAttack_2 - Start of Modification - DicyCat - Luke Taylor
 		Entity nearestEnemy = getNearestEnemy(targets);
 		//PowerUpAddition_MultipleAttack_2 - End of Modification - DicyCat - Luke Taylor
-		
+
 		Vector2 direction = new Vector2();
 		direction.set(new Vector2(nearestEnemy.getCentre().x,nearestEnemy.getCentre().y).sub(getCentre()));		//creates a vector2 distance of the line between the firetruck and the nearest enemy
 		float angle = direction.angle();												//works out the angle of the water stream
@@ -373,7 +398,7 @@ public class FireTruck extends Entity{
 
 		//PowerUpAddition_DamageIncrease_1 - Start of Modification - DicyCat - Luke Taylor
 		float finalFlowRate = flowRate;
-		
+
 		switch(powerUps[2]) {
 		case ACTIVE:
 			finalFlowRate *= 2; // Doubles the damage taken by an enemy if the power up is active
@@ -382,24 +407,24 @@ public class FireTruck extends Entity{
 			break;
 		}
 		//PowerUpAddition_DamageIncrease_1 - End of Modification - DicyCat - Luke Taylor
-		
+
 		//PowerUpAddition_MultipleAttack_3 - Start of Modification - DicyCat - Luke Taylor
 		switch(powerUps[1]) {
 		case ACTIVE:
 			targets.remove(nearestEnemy);
-			
+
 			secondStreamFiring = !targets.isEmpty();
-			
+
 			if (secondStreamFiring) {
 				Entity secondNearest = getNearestEnemy(targets);
-				
+
 				Vector2 secondDirection = new Vector2(secondNearest.getCentre().x,secondNearest.getCentre().y).sub(getCentre());
 				float secondAngle = secondDirection.angle();
-				
+
 				secondStream.setRotation(secondAngle);
 				secondStream.setRange(secondDirection.len());
 				secondStream.setPosition(getCentre().add(secondDirection.scl(0.5f)));
-				
+
 				secondNearest.applyDamage(finalFlowRate);
 			}
 			break;
@@ -407,14 +432,14 @@ public class FireTruck extends Entity{
 			break;
 		}
 		//PowerUpAddition_MultipleAttack_3 - End of Modification - DicyCat - Luke Taylor
-		
-		
+
+
 		//PowerUpAddition_DamageIncrease_2 - Start of Modification - DicyCat - Luke Taylor
 		nearestEnemy.applyDamage(finalFlowRate);			//Applies damage to the nearest enemy
 		currentWaterLevel -= flowRate;					//reduces the tank by amount of water used
 		//PowerUpAddition_DamageIncrease_2 - End of modification - DicyCat - Luke Taylor
-		
-		
+
+
 	}
 
 	/**
@@ -445,11 +470,11 @@ public class FireTruck extends Entity{
 			break;
 		default:				//If invincibility power up is not active, damage is taken as usual
 			super.applyDamage(damage);
-			break;			
+			break;
 		}
 	}
 	//PowerUpAddition_Invincibility_1 - End of Modification - DicyCat - Luke Taylor
-	
+
 	/**
 	 * Checks if the firetrucks tank is full of water.
 	 * @return true if full, false if not
@@ -538,9 +563,9 @@ public class FireTruck extends Entity{
 	}
 	// TRUCK_SELECT_CHANGE_8 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
-	
+
 	//PowerUpAddition_General_2 - Start of modification - DicyCat - Luke Taylor
-	
+
 	/**
 	 * Lets the fireTruck know it can use a certain powerup
 	 * @param type int between 0-6 (inclusive) that relates to a different possible power
@@ -548,7 +573,7 @@ public class FireTruck extends Entity{
 	public void obtainPowerUp(int type) {
 		powerUps[type] = PowerUp.OBTAINED;
 	}
-	
+
 	/**
 	 * Changes the current power up selected
 	 */
@@ -558,7 +583,7 @@ public class FireTruck extends Entity{
 			selectedPowerUp = 0;
 		}
 	}
-	
+
 	/**
 	 *  Activates the currently selected specific powerup
 	 */
@@ -567,7 +592,7 @@ public class FireTruck extends Entity{
 			powerUps[selectedPowerUp] = PowerUp.ACTIVE; // Activates the power up
 		}
 	}
-	
+
 	/**
 	 * Used for HUD to get the texture of the currently selected power Up
 	 * @return Texture either active or inactive version of currently selected powerup
@@ -579,6 +604,6 @@ public class FireTruck extends Entity{
 			return Kroy.mainGameScreen.textures.getActivePowerUp(selectedPowerUp);
 		}
 	}
-	
+
 	//PowerUpAddition_General_2 - End of modification - DicyCat - Luke Taylor
 }

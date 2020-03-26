@@ -23,7 +23,8 @@ import com.dicycat.kroy.misc.Button;
 */
 public class GameOverScreen implements Screen{
 	
-	private Kroy game; 
+	private Kroy game;
+	private  int difficulty;
 	  private OrthographicCamera gamecam;
 	  private Viewport gameport;
 	  
@@ -78,7 +79,9 @@ public class GameOverScreen implements Screen{
 	  private int xHotSpot = pm.getWidth() / 3;	//where the cursor's aim is 
 	  private int yHotSpot = 0;
 
-	public GameOverScreen(Kroy game, int truckNum, Boolean result) { 
+	// DicyCat Assessment 4 - Added difficulty parameter
+	public GameOverScreen(Kroy game, int truckNum, Boolean result, int difficulty) {
+		this.difficulty = difficulty;
 		  this.game = game; 
 		  this.result = result;
 		  gamecam = new OrthographicCamera();    //m
@@ -154,7 +157,7 @@ public class GameOverScreen implements Screen{
 		  if (newGameButton.buttonAction()) {
 			  this.dispose();
 			  game.batch.end();
-			  game.newGame();
+			  game.newGame(difficulty);
 			  return;
 		  }
 		
