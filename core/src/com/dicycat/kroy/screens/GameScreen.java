@@ -110,10 +110,13 @@ public class GameScreen implements Screen{
 	public GameScreen(Kroy _game, int difficulty) {
 		currentSave = new GameSave();
 
-		objectsToAdd = new ArrayList<GameObject>(); //MC : moved this code from show to the constructor bc i need game Objects to be instantiated earlier
+		//SAVE_GAME - START OF MODIFICATION- MARTHA CARTWRIGHT : moved this code from show to the constructor as gameObjects needs to be instantiated earlier
+		objectsToAdd = new ArrayList<GameObject>();
 		gameObjects = new ArrayList<GameObject>();
 		deadObjects = new ArrayList<GameObject>();
 		debugObjects = new ArrayList<DebugDraw>();
+		// SAVE_GAME - END OF MODIFICATION
+
 		// END_GAME_FIX_1 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		fortressesCount = 6; // Initialize fortress count to 6
 		// END_GAME_FIX_1 - END OF MODIFICATION - NP STUDIOS
@@ -141,13 +144,14 @@ public class GameScreen implements Screen{
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
 		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
-			truckStats[i][0] += initialTruckStats[i][0] * healthModifier;	//Modify truck health
+			truckStats[i][0] = initialTruckStats[i][0] + initialTruckStats[i][0] * healthModifier;	//Modify truck health
 		}
 
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
-	public GameScreen(Kroy _game, GameSave savedGame){
+	// SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+	public GameScreen(Kroy _game, GameSave savedGame){ //Alternative constructor for GameScreen that allows you to contruct an instance of GameScreen using a saved game.
 	    currentSave = new GameSave();
 
 		objectsToAdd = new ArrayList<GameObject>();
@@ -167,8 +171,9 @@ public class GameScreen implements Screen{
 		optionsWindow.visibility(false);
 		players = new ArrayList<>();
 
-		spawnPosition = savedGame.getSpawnPos();
 
+		//Sets spawnPosition, gametimer, fortressCount, and difficulty to the values saved in GameSave
+		spawnPosition = savedGame.getSpawnPos();
 		gameTimer = savedGame.getGameTimer();
 		fortressesCount = savedGame.getFortressCount();
 		difficulty = savedGame.getDifficulty();
@@ -178,14 +183,15 @@ public class GameScreen implements Screen{
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
 		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
-			truckStats[i][0] += initialTruckStats[i][0] * healthModifier;	//Modify truck health
+			truckStats[i][0] = initialTruckStats[i][0] + initialTruckStats[i][0] * healthModifier;	//Modify truck health
 		}
 
 		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
 
-		gameObjects.addAll(savedGame.getGameObjects());
+		gameObjects.addAll(savedGame.getGameObjects()); //Adds all the saved game objects back into the game
 		players.addAll(savedGame.getPlayers());
 	}
+	//GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 	/**
 	 * Initializes the screen which is first shown
@@ -322,13 +328,16 @@ public class GameScreen implements Screen{
 				minigame.stage.act();
 				minigame.clickCheck();
 				break;
-            case SAVE:
+
+			//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+            case SAVE: //New case for the save window
             	Gdx.input.setInputProcessor(saveWindow.stage);
 				pauseWindow.visibility(false);
 				saveWindow.visibility(true);
 				saveWindow.stage.draw();
 				saveClickCheck();
                 break;
+			// GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 
 			default:
@@ -469,7 +478,7 @@ public class GameScreen implements Screen{
 	 */
 	public void DrawCircle(Vector2 position, float radius, int lineWidth, Color colour) {
 		// MEMORY LEAK FIX 3 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
-		// Added an if statement to fully ensure debugging view is requested as we noticed the original teams debug
+		// Added a'/n if statement to fully ensure debugging view is requested as we noticed the original teams debug
 		// code causes a memory leak and possibly crashes the game overtime.
 		if (showDebug) {
 			debugObjects.add(new DebugCircle(position, radius, lineWidth, colour));
@@ -580,6 +589,10 @@ public class GameScreen implements Screen{
 	    });
 	}
 
+	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * Checks the save window buttons for input
+	 */
 	private void saveClickCheck (){
 		for (int i = 0; i <= 2; i++) {
             final int finalI = i;
@@ -592,6 +605,7 @@ public class GameScreen implements Screen{
 			});
 		}
 	}
+	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 	/**
 	 * Remove one fortress to the fortressCount
@@ -664,8 +678,13 @@ public class GameScreen implements Screen{
 		players.get(activeTruck).setSelected(true);
 	}
 	// TRUCK_SELECT_CHANGE_18 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
-	
-	
+
+
+	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * @param indexToSave
+	 * @return whether or not the game was successfully saved
+	 */
 	public Boolean saveGame(int indexToSave) {
 
 		for(GameObject gameObject : gameObjects){

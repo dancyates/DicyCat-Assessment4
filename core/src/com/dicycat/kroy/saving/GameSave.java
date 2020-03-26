@@ -3,13 +3,15 @@ package com.dicycat.kroy.saving;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import com.badlogic.gdx.math.Vector2;
 import com.dicycat.kroy.GameObject;
-import com.dicycat.kroy.entities.Entity;
-import com.dicycat.kroy.entities.FireStation;
 import com.dicycat.kroy.entities.FireTruck;
 
+/**
+ * Contains methods required to save an instance of the game for Assessment 4's Game Save requirement.
+ *
+ * @author Martha Cartwright
+ */
 public class GameSave {
 	
 	private List<GameObject> gameObjects;
@@ -18,13 +20,16 @@ public class GameSave {
 	private int difficulty;
 	private float gameTimer;
 	private int fortressCount;
-	private static List<GameSave> savedGames = Arrays.asList(new GameSave(), new GameSave(), new GameSave());
-	private Boolean beenSaved;
+	private static List<GameSave> savedGames = Arrays.asList(new GameSave(), new GameSave(), new GameSave()); //A static list that contains all three instances of GameSave for each of the three save files
+	private Boolean beenSaved; //Variable that stores whether or not the saveGame() method has been called for that instance of GameSave
 
 
+	/**
+	 * Initialises as an empty save
+	 */
 	public GameSave() {
-		gameObjects = new ArrayList<GameObject>();
-		players = new ArrayList<FireTruck>();
+		gameObjects = new ArrayList<>();
+		players = new ArrayList<>();
 
 		this.spawnPos = null;
 		this.difficulty = 0;
@@ -33,6 +38,15 @@ public class GameSave {
 		this.beenSaved = false;
 	}
 
+	/**
+	 * If the index to save does not already have a GameSave that has been saved to, then this method saves the game and adds the save to savedGames
+	 * @param indexToSaveTo The index of the save file to save to
+	 * @param difficulty Difficulty
+	 * @param spawnPos Spawn Position of the active truck
+	 * @param gameTimer The time left in the game
+	 * @param fortressCount The number of fortresses left
+	 * @return Whether the game was able to save; whether that save file already had a game saved to it or not
+	 */
 	public Boolean saveGame(int indexToSaveTo, int difficulty, Vector2 spawnPos, float gameTimer, int fortressCount) {
 
 		if (!savedGames.get(indexToSaveTo).hasBeenSaved()){
@@ -45,6 +59,12 @@ public class GameSave {
 			return true;
 		}
 		return false;
+	}
+
+	//Getters:
+
+	public static List<GameSave> getSavedGames(){
+		return savedGames;
 	}
 
 	public List<GameObject> getGameObjects(){ return gameObjects; }
@@ -73,17 +93,7 @@ public class GameSave {
 		return beenSaved;
 	}
 
-	public static List<GameSave> getSavedGames(){
-		return savedGames;
-	}
-
-	public void setSpawnPos(Vector2 Pos) {
-		this.spawnPos = Pos;
-	}
-
-	public void addGameObjects(List<GameObject> newGameObjects) {
-		this.gameObjects.addAll(newGameObjects);
-	}
+	//Setters:
 	
 	public void addGameObject(GameObject newGameObject) {
 		this.gameObjects.add(newGameObject);
