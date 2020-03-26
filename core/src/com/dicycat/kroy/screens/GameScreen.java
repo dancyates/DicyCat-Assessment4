@@ -579,6 +579,7 @@ public class GameScreen implements Screen{
 	    		return;
 	    	}
 	    });
+
 		//save button
 		pauseWindow.save.addListener(new ClickListener() {
 	    	@Override
@@ -682,8 +683,8 @@ public class GameScreen implements Screen{
 
 	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
 	/**
-	 * @param indexToSave
-	 * @return whether or not the game was successfully saved
+	 * @param indexToSave The index to save the game to
+	 * @return Whether or not the game was successfully saved
 	 */
 	public Boolean saveGame(int indexToSave) {
 
@@ -697,9 +698,5 @@ public class GameScreen implements Screen{
 		return currentSave.saveGame(indexToSave, difficulty, players.get(activeTruck).getPosition(),gameTimer,fortressesCount);
 
 	}
-
-
-    public List<GameSave> getGameSaves(){
-	    return currentSave.getSavedGames();
-    }
+	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 }

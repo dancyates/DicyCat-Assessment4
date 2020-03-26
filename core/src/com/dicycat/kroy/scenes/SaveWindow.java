@@ -20,13 +20,13 @@ import com.dicycat.kroy.saving.GameSave;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * Save window
+ *
+ * @author Martha Cartwright
+ */
 public class SaveWindow {
-    /**
-     * Save window
-     *
-     * @author Martha Cartwright
-     */
+
     public Stage stage;
     public Table table = new Table();
     private SpriteBatch sb;
@@ -53,15 +53,17 @@ public class SaveWindow {
     public void update(){
         table.clear();
         table.setBackground(background);
+
         for (int i = 0; i <= 2; i++){
             if (GameSave.getSavedGames().get(i).hasBeenSaved()) saveButtons.set(i,new TextButton("GAME SAVE " + i, skin));
             else saveButtons.set(i,new TextButton("EMPTY SLOT", skin));
+
             table.row();
             table.add(saveButtons.get(i)).width(Kroy.CentreWidth());
-            }
+        }
 
-            table.setFillParent(true);
-            stage.addActor(table);
+        table.setFillParent(true);
+        stage.addActor(table);
     }
 
 

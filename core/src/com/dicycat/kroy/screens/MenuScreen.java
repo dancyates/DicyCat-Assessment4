@@ -276,17 +276,19 @@ public class MenuScreen implements Screen{
 		  	  controlsWindow.stage.draw(); // draw the window
 		  	  controlsWindow.clickCheck(); // constantly check for user inputs from the mouse
 		  	  break;
-		  // CONTROL_SCREEN_7 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER --------------------------------------------------------------------
+		  // CONTROL_SCREEN_7 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER -------------------------------------------------------------------
 
+		  //SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+		  //New state for the load window
 		  case LOAD:
-
-			  Gdx.input.setInputProcessor(loadWindow.stage);
+			  Gdx.input.setInputProcessor(loadWindow.stage); //Set inputs from the user to be valid only for the load window
 			  loadWindow.visibility(true);
 			  loadWindow.stage.act();
 			  loadWindow.stage.draw();
-			  loadClickCheck();
+			  loadClickCheck(); //Check for user inputs from the mouse
 			  break;
 		  }
+		  //SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 
   	}
@@ -327,20 +329,25 @@ public class MenuScreen implements Screen{
 		// TRUCK_SELECT_CHANGE_19 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	}
 
+
+	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * Checks the load window buttons for input.
+	 */
 	private void loadClickCheck (){
-
-
 		for (int i = 0; i <= 2; i++) {
 			final int finalI = i;
 			saveButtons.get(i).addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					startGame(GameSave.getSavedGames().get(finalI));
+					if (GameSave.getSavedGames().get(finalI).hasBeenSaved()) { //If save slot corresponding to the button the user pressed has a saved game in it
+						startGame(GameSave.getSavedGames().get(finalI)); //
+					}
 				}
 			});
 		}
 	}
-
+	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 	/**
 	 * If the game isn't currently running, creates a new game
@@ -356,12 +363,14 @@ public class MenuScreen implements Screen{
 	}
 	// TRUCK_SELECT_CHANGE_20 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
-	public void startGame(GameSave gameSave){
+	//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+	public void startGame(GameSave gameSave){ //Alternative version of startGame that uses a saved game
 		if (!currentlyRunningGame) {	// Checks if a new GameScren is currently running and either makes one or ignores the commands
 			currentlyRunningGame = true; // Makes sure that only one GameScreen is opened at once
 			game.newGame(gameSave); // Calls the function in Kroy to start a new game
 		}
 	}
+	//GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
 
   public void setCurrentlyRunningGame(boolean state) {
 	  currentlyRunningGame = state;

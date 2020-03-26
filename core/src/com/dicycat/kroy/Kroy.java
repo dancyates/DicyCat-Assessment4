@@ -66,6 +66,12 @@ public class Kroy extends Game {
 		setScreen(mainGameScreen);// Display new game
 	}
 
+
+	//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * Alternative version of gameSave which creates a new game using a saved game
+	 * @param gameSave A saved game to launch the game using.
+	 */
 	public void newGame(GameSave gameSave){
 		mainGameScreen = new GameScreen(this, gameSave);
 		setScreen(mainGameScreen);
