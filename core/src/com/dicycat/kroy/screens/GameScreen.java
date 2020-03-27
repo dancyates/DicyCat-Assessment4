@@ -31,7 +31,7 @@ import com.dicycat.kroy.scenes.PauseWindow;
 
 /**
  * Contains the main game logic
- * 
+ *
  * @author Riju De
  * @author lnt20
  *
@@ -44,7 +44,7 @@ public class GameScreen implements Screen{
 		RESUME,
 		MINIGAME
 	}
-	
+
 	public Kroy game;
 	public GameTextures textures;
 	public static Boolean showDebug = false;
@@ -53,14 +53,14 @@ public class GameScreen implements Screen{
 	// MINIMAP_1 - START OF MODIFICATION - NP STUDIOS - BETHANY GILMORE
 	private Texture minimap = new Texture("YorkMap.png"); // A .png version of the tilemap background to use as the background texture for the minimap.
 	// MINIMAP_1 - END OF MODIFICATION - NP STUDIOS - BETHANY GILMORE
-	
+
 	public GameScreenState state = GameScreenState.RUN;
-	
+
 	public static TiledGameMap gameMap;
-	
+
 	private OrthographicCamera gamecam;	//follows along what the port displays
 	private Viewport gameport;
-	
+
 	private HUD hud;
 	private PauseWindow pauseWindow;
 	private OptionsWindow optionsWindow;
@@ -81,10 +81,10 @@ public class GameScreen implements Screen{
 	private ArrayList<FireTruck> players;
 	// TRUCK_SELECT_CHANGE_11 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	private int lives = 4;
-	
+
 	private int fortressesCount;
 	private Vector2 spawnPosition;	//Coordinates the player spawns at
-	
+
 	private List<GameObject> gameObjects, deadObjects;	//List of active game objects
 	private List<GameObject> objectsToRender = new ArrayList<GameObject>(); // List of game objects that have been updated but need rendering
 	private List<GameObject> objectsToAdd;
@@ -167,17 +167,17 @@ public class GameScreen implements Screen{
 		// Added health and damage values for each fortress instantiation
 		// Added new fortresses and set position in accordance with collisions on tiled map
 		gameObjects.add(new Fortress(new Vector2(2903,3211),textures.getFortress(0), textures.getDeadFortress(0),
-				new Vector2(256, 218), 400, 5));
+				new Vector2(256, 218), 400, 5, 0));
 		gameObjects.add(new Fortress(new Vector2(3200,5681), textures.getFortress(1), textures.getDeadFortress(1),
-				new Vector2(256, 320), 500, 10));
+				new Vector2(256, 320), 500, 10, 1));
 		gameObjects.add(new Fortress(new Vector2(2050,1937), textures.getFortress(2), textures.getDeadFortress(2),
-				new Vector2(400, 240), 600, 15));
+				new Vector2(400, 240), 600, 15, 2));
 		gameObjects.add(new Fortress(new Vector2(4496,960), textures.getFortress(3), textures.getDeadFortress(3),
-				new Vector2(345, 213), 700, 20));
+				new Vector2(345, 213), 700, 20, 3));
 		gameObjects.add(new Fortress(new Vector2(6112,1100), textures.getFortress(4), textures.getDeadFortress(4),
-				new Vector2(300, 240), 800, 25)); //382, 319
+				new Vector2(300, 240), 800, 25, 4)); //382, 319
 		gameObjects.add(new Fortress(new Vector2(600,4000), textures.getFortress(5), textures.getDeadFortress(5),
-				new Vector2(300, 270), 900, 30)); //45, 166
+				new Vector2(300, 270), 900, 30, 5)); //45, 166
 		// FORTRESS_HEALTH_1 & NEW_FORTRESSES_2 - END OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE  & ALASDAIR PILMORE-BEDFORD
 	}
 
@@ -461,7 +461,7 @@ public class GameScreen implements Screen{
 	public List<GameObject> getGameObjects(){
 		return gameObjects;
 	}
-	
+
 	public int getLives() {
 		return lives;
 	}
@@ -535,7 +535,7 @@ public class GameScreen implements Screen{
 		}
 
 	}
-	
+
 	/**
 	 * Respawns the player at the spawn position and updates the HUD
 	 */
