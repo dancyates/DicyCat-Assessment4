@@ -255,6 +255,7 @@ public class GameScreen implements Screen{
 	 * Called every frame and calls the methods to update and render the game objects, as well as handling input.
 	 */
 	public void render(float delta) {
+
 		Gdx.input.setInputProcessor(pauseWindow.stage);  //Set input processor
 		pauseWindow.stage.act();
 
@@ -686,16 +687,16 @@ public class GameScreen implements Screen{
 	 * @param indexToSave The index to save the game to
 	 * @return Whether or not the game was successfully saved
 	 */
-	public Boolean saveGame(int indexToSave) {
+	public void saveGame(int indexToSave) {
 
-		for(GameObject gameObject : gameObjects){
-            currentSave.addGameObject(gameObject);
-        }
-		for(FireTruck player : players) {
-            currentSave.addPlayer(player);
-        }
-
-		return currentSave.saveGame(indexToSave, difficulty, players.get(activeTruck).getPosition(),gameTimer,fortressesCount);
+		if (currentSave.saveGame(indexToSave, difficulty, players.get(activeTruck).getPosition(),gameTimer,fortressesCount)){
+			for(GameObject gameObject : gameObjects){
+				currentSave.addGameObject(gameObject);
+			}
+			for(FireTruck player : players) {
+				currentSave.addPlayer(player);
+			}
+		}
 
 	}
 	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
