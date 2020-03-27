@@ -7,6 +7,9 @@ import com.dicycat.kroy.bullets.Bullet;
 import com.dicycat.kroy.bullets.BulletDispenser;
 import com.dicycat.kroy.bullets.Pattern;
 import com.dicycat.kroy.misc.StatBar;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.HashMap;
 
 /**
  * Hostile building which fires at the player when within its radius.
@@ -22,6 +25,7 @@ public class Fortress extends Entity {
 	// FORTRESS_DAMAGE_1 - END OF MODIFICATION - NP STUDIOS
 
 	private int fortressNum;
+	private HashMap<Float, Boolean> hpLevels;
 
 	/**
 	 * @param spawnPos
@@ -38,6 +42,13 @@ public class Fortress extends Entity {
 		this.damage = fortressDamage;
 
 		this.fortressNum = fortressNum;
+
+		hpLevels = new HashMap<Float, Boolean>();
+		hpLevels.put(0.8f, false);
+		hpLevels.put(0.6f, false);
+		hpLevels.put(0.4f, false);
+		hpLevels.put(0.2f, false);
+		hpLevels.put(0f, false);
 
 
 		// FORTRESS_DAMAGE_3 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
@@ -96,7 +107,6 @@ public class Fortress extends Entity {
 		healthBar.setPosition(getCentre().add(0, (getHeight() / 2) + 25));
 		healthBar.setBarDisplay((healthPoints*500)/maxHealthPoints);
 
-
 		changeFortressTexture(fortressNum);  // Dan
 	}
 
@@ -128,17 +138,22 @@ public class Fortress extends Entity {
 		int currentHealth = getHealthPoints();
 		float healthNormalised = (float)currentHealth/maxHealthPoints;
 
-		if (healthNormalised > 0.8 && healthNormalised <= 1){
+		if (healthNormalised > 0.8 && healthNormalised <= 1 && !hpLevels.get(0.8f)){
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 0));
-		} else if (healthNormalised > 0.60 && healthNormalised <=  0.8) {
+			hpLevels.put(0.8f, true);
+		} else if (healthNormalised > 0.60 && healthNormalised <=  0.8 && !hpLevels.get(0.6f)) {
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 1));
-		} else if (healthNormalised > 0.40 && healthNormalised <= 0.60) {
+			hpLevels.put(0.6f, true);
+		} else if (healthNormalised > 0.40 && healthNormalised <= 0.60 && !hpLevels.get(0.4f)) {
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 2));
-		} else if (healthNormalised > 0.20 && healthNormalised <= 0.40) {
+			hpLevels.put(0.4f, true);
+		} else if (healthNormalised > 0.20 && healthNormalised <= 0.40 && !hpLevels.get(0.2f)) {
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 3));
-		} else if (healthNormalised > 0 && healthNormalised <= 0.20) {
+			hpLevels.put(0.2f, true);
+		} else if (healthNormalised > 0 && healthNormalised <= 0.20 && !hpLevels.get(0f)) {
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 4));
-		} else if (healthNormalised <= 0) {
+			hpLevels.put(0f, true);
+		} else if (healthNormalised == 0) {
 			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 5));
 		};
 	};
