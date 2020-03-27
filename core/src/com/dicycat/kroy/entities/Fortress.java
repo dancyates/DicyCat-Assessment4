@@ -99,6 +99,25 @@ public class Fortress extends Entity {
 		healthBar.setBarDisplay((healthPoints*500)/maxHealthPoints);
 	}
 
+	private void changeFortressTextureTo(String textureName) {
+		int currentHealth = getHealthPoints();
+		float healthNormalised = (float)currentHealth/maxHealthPoints;
+
+		if (healthNormalised > 0.8 && healthNormalised <= 1){
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 0));
+		} else if (healthNormalised > 0.60 && healthNormalised <=  0.8) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 1));
+		} else if (healthNormalised > 0.40 && healthNormalised <= 0.60) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 2));
+		} else if (healthNormalised > 0.20 && healthNormalised <= 0.40) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 3));
+		} else if (healthNormalised > 0 && healthNormalised <= 0.20) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 4));
+		} else if (healthNormalised <= 0) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 5));
+		};
+	};
+
 	/**
 	 * Updates the dispenser associated with the fortress and adds bullets to the mainGameScreen
 	 */
