@@ -32,7 +32,6 @@ public class Fortress extends Entity {
 
 	// FORTRESS_HEALTH_2 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
 	// Added health parameter to Fortress constructor and changed it in the call to super from "500" to "health"
-	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage ) { ////
 	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage, int fortressNum) { ////
 		super(spawnPos, fortressTexture, size, health, 500);
 	// FORTRESS_HEALTH_2 - END OF MODIFICATION - NP STUDIOS
@@ -71,7 +70,6 @@ public class Fortress extends Entity {
 	@Override
 	public void die() {
 		super.die();
-		sprite.setTexture(deadTexture);
 		Kroy.mainGameScreen.getHud().updateScore(1000);
 		healthBar.setRemove(true);
 		displayable = true;
@@ -97,7 +95,34 @@ public class Fortress extends Entity {
 		super.applyDamage(damage);
 		healthBar.setPosition(getCentre().add(0, (getHeight() / 2) + 25));
 		healthBar.setBarDisplay((healthPoints*500)/maxHealthPoints);
+
+
+		changeFortressTexture(fortressNum);  // Dan
 	}
+
+	private void changeFortressTexture(int fortressNumber) {
+		switch (fortressNumber) {
+			case 0:
+				changeFortressTextureTo("cliffords_tower");
+				break;
+			case 1:
+				changeFortressTextureTo("york_minster");
+				break;
+			case 2:
+				changeFortressTextureTo("york_museum");
+				break;
+			case 3:
+				changeFortressTextureTo("railway_station");
+				break;
+			case 4:
+				changeFortressTextureTo("york_hospital");
+				break;
+			case 5:
+				changeFortressTextureTo("central_hall");
+				break;
+			default:
+		};
+	};
 
 	private void changeFortressTextureTo(String textureName) {
 		int currentHealth = getHealthPoints();
