@@ -21,6 +21,8 @@ public class Fortress extends Entity {
 	private int damage; 	// Added a new attribute 'damage'
 	// FORTRESS_DAMAGE_1 - END OF MODIFICATION - NP STUDIOS
 
+	private int fortressNum;
+
 	/**
 	 * @param spawnPos
 	 * @param fortressTexture
@@ -31,9 +33,13 @@ public class Fortress extends Entity {
 	// FORTRESS_HEALTH_2 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
 	// Added health parameter to Fortress constructor and changed it in the call to super from "500" to "health"
 	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage ) { ////
+	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage, int fortressNum) { ////
 		super(spawnPos, fortressTexture, size, health, 500);
 	// FORTRESS_HEALTH_2 - END OF MODIFICATION - NP STUDIOS
 		this.damage = fortressDamage;
+
+		this.fortressNum = fortressNum;
+
 
 		// FORTRESS_DAMAGE_3 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
 		// Added fortressDamage as a parameter to the constructor above
