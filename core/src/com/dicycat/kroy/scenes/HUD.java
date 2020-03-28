@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
+import com.dicycat.kroy.screens.GameScreen;
 
 import static java.lang.Math.abs;
 
@@ -23,6 +24,7 @@ public class HUD {
 	public Stage stage;
 	private Viewport viewport;	//creating new port so that the HUD stays locked while map can move around independently
 	private Integer trucks = 4;
+	public static boolean refillVisible = true;
 
 	// FORTRESS_IMPROVE_2 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE
 	//  Deleted world timer attribute and changed to timer
@@ -42,6 +44,7 @@ public class HUD {
 	private Label timerLabel;
 	private Label scoreCountLabel;
 	private Label fortressCountLabel;
+	private Label refillPrompt;
 
 	
 	
@@ -68,7 +71,7 @@ public class HUD {
 		fortressLabel = new Label("FORTRESSES REMAINING:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		fortressCountLabel = new Label(String.format("%01d", 6), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		// FORTRESS_COUNT_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
-		
+		refillPrompt = new Label("PRESS 'R' TO REFILL!", new Label.LabelStyle(new BitmapFont(), Color.RED));
 
 		tableHUD.add(timeLabel).expandX().padTop(10);
 		tableHUD.add(timerLabel).expandX().padTop(10);
@@ -78,6 +81,7 @@ public class HUD {
 		tableHUD.add(fortressLabel).expandX().padTop(10);
 		tableHUD.add(fortressCountLabel).expandX().padTop(10);
 		// FORTRESS_COUNT_2 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
+		tableHUD.add(refillPrompt).expandX().padTop(10);
 		
 		stage.addActor(tableHUD);
 		
@@ -103,6 +107,12 @@ public class HUD {
 		// Updates the count depending on the amount of fortresses still alive
 		fortressCountLabel.setText(String.format("%01d", Kroy.mainGameScreen.getFortressesCount()));
 		// FORTRESS_COUNT_3 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
+		if(refillVisible){
+			refillPrompt.setText(String.format("PRESS 'R' TO REFILL!"));
+		}
+		else{
+			refillPrompt.setText(String.format(""));
+		}
 	}
 
 	public Integer getFinalScore() {
@@ -116,8 +126,7 @@ public class HUD {
 	/** Updates the score variable
 	 * @param x	points to be added to the score
 	 */
-	public void updateScore(Integer x){
-		score += x;
-	}
+	public void updateScore(Integer x){ score += x; }
+
 }
 
