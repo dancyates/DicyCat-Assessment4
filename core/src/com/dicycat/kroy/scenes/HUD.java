@@ -111,7 +111,7 @@ public class HUD {
 			refillPrompt.setText(String.format("PRESS 'R' TO REFILL!"));
 		}
 		else{
-			refillPrompt.setText(String.format(""));
+			refillPrompt.setText(String.format("                                       "));
 		}
 	}
 
