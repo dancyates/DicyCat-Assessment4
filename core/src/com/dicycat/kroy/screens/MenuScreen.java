@@ -345,6 +345,13 @@ public class MenuScreen implements Screen{
 					}
 				}
 			});
+			loadWindow.back.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					loadWindow.visibility(false);
+					Kroy.mainMenuScreen.state = MenuScreen.MenuScreenState.MAINMENU;
+				}
+			});
 		}
 	}
 	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT

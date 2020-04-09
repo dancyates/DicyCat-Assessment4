@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -33,6 +34,9 @@ public class SaveWindow {
     private NinePatch patch = new NinePatch(new Texture("loool.jpg"), 3, 3, 3, 3);
     private NinePatchDrawable background = new NinePatchDrawable(patch);
     private static Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    public TextButton back = new TextButton("BACK", skin); // back button texture
+    private Label blank = new Label(" ", skin);
+
 
     public static List<TextButton> saveButtons = new ArrayList<>(Arrays.asList
             (new TextButton("EMPTY SLOT", skin),
@@ -61,6 +65,13 @@ public class SaveWindow {
             table.row();
             table.add(saveButtons.get(i)).width(Kroy.CentreWidth());
         }
+
+        table.row();
+        table.add(blank);
+        table.add(blank);
+        table.add(blank);
+        table.add(blank);
+        table.add(back);
 
         table.setFillParent(true);
         stage.addActor(table);
