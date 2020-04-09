@@ -25,9 +25,13 @@ import com.dicycat.kroy.entities.*;
 import com.dicycat.kroy.gamemap.TiledGameMap;
 import com.dicycat.kroy.minigame.Minigame;
 import com.dicycat.kroy.misc.PowerUp;
+import com.dicycat.kroy.saving.GameSave;
 import com.dicycat.kroy.scenes.HUD;
 import com.dicycat.kroy.scenes.OptionsWindow;
 import com.dicycat.kroy.scenes.PauseWindow;
+import com.dicycat.kroy.scenes.SaveWindow;
+
+import static com.dicycat.kroy.scenes.SaveWindow.saveButtons;
 
 
 /**
@@ -43,7 +47,8 @@ public class GameScreen implements Screen{
 		PAUSE,
 		RUN,
 		RESUME,
-		MINIGAME
+		MINIGAME,
+        SAVE
 	}
 
 	public Kroy game;
@@ -70,15 +75,22 @@ public class GameScreen implements Screen{
 	private Integer aliensKilled;
 	private Vector2 lastAlienDeath;
 	//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
+	private SaveWindow saveWindow;
 
 	// TRUCK_SELECT_CHANGE_11 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Slightly edited trucks statistics to make the game more balanced.
-	private Float[][] truckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
+	private Float[][] initialTruckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
 			{450f, 1f, 400f, 300f},		//Speed
 			{300f, 2f, 400f, 300f},	//Flow rate
 			{300f, 1f, 500f, 300f},		//Capacity
 			{300f, 1f, 400f, 450f}		//Range
 		};
+	private Float[][] truckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
+			{0f, 0f, 0f, 0f},		//Speed
+			{0f, 0f, 0f, 0f},	//Flow rate
+			{0f, 0f, 0f, 0f},		//Capacity
+			{0f, 0f, 0f, 0f}		//Range
+	};
 
 	//PowerUpAddition_Invisibility_1 - Start of Modification - DicyCat - Luke Taylor
 	private boolean playerVisible = true;
@@ -99,10 +111,21 @@ public class GameScreen implements Screen{
 	private List<GameObject> objectsToAdd;
 	private List<DebugDraw> debugObjects; //List of debug items
 
+    public static GameSave currentSave = new GameSave();
+
 	// TRUCK_SELECT_CHANGE_12 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Removed truckNum from constructor parameters
 	// DicyCat Assessment 4 - Added difficulty parameter
 	public GameScreen(Kroy _game, int difficulty) {
+		currentSave = new GameSave();
+
+		//SAVE_GAME - START OF MODIFICATION- MARTHA CARTWRIGHT : moved this code from show to the constructor as gameObjects needs to be instantiated earlier
+		objectsToAdd = new ArrayList<GameObject>();
+		gameObjects = new ArrayList<GameObject>();
+		deadObjects = new ArrayList<GameObject>();
+		debugObjects = new ArrayList<DebugDraw>();
+		// SAVE_GAME - END OF MODIFICATION
+
 		// END_GAME_FIX_1 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		fortressesCount = 6; // Initialize fortress count to 6
 		// END_GAME_FIX_1 - END OF MODIFICATION - NP STUDIOS
@@ -112,6 +135,8 @@ public class GameScreen implements Screen{
 		gameMap = new TiledGameMap();										//or FitPort to make it fit into a specific width/height ratio
 		pauseWindow = new PauseWindow(game);
 		pauseWindow.visibility(false);
+		saveWindow = new SaveWindow(game);
+		saveWindow.visibility(false);
 		optionsWindow = new OptionsWindow(game);
 		optionsWindow.visibility(false);
 		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
@@ -133,7 +158,7 @@ public class GameScreen implements Screen{
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
 		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
-			truckStats[i][0] += truckStats[i][0] * healthModifier;	//Modify truck health
+			truckStats[i][0] = initialTruckStats[i][0] + initialTruckStats[i][0] * healthModifier;	//Modify truck health
 		}
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
@@ -188,10 +213,7 @@ public class GameScreen implements Screen{
 	 */
 	@Override
 	public void show() {
-		objectsToAdd = new ArrayList<GameObject>();
-		gameObjects = new ArrayList<GameObject>();
-		deadObjects = new ArrayList<GameObject>();
-		debugObjects = new ArrayList<DebugDraw>();
+
 
 		// TRUCK_SELECT_CHANGE_13 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		// Adds all the different firetruck types to the players ArrayList
@@ -214,42 +236,45 @@ public class GameScreen implements Screen{
 			gamecam.translate(new Vector2(fireTrucks.get(activeTruck).getX(), fireTrucks.get(activeTruck).getY())); // sets initial Camera position
 			// TRUCK_SELECT_CHANGE_13 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
-		gameObjects.add(new FireStation());
+			gameObjects.add(new FireStation());
 
-		// PATROLS_3 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
-		// Creates the aliens for the patrols and adds them to gameObjects so they can be updated each tick
-		int timeBetween = 50;
-		for (int patrolNum = 1; patrolNum <=4; patrolNum++)
-		for (int i = 0; i < 5; i++) {
-			gameObjects.add(new Alien(patrolNum, i * timeBetween, 300));
+			// PATROLS_3 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
+			// Creates the aliens for the patrols and adds them to gameObjects so they can be updated each tick
+			int timeBetween = 50;
+			for (int patrolNum = 1; patrolNum <= 4; patrolNum++)
+				for (int i = 0; i < 5; i++) {
+					gameObjects.add(new Alien(patrolNum, i * timeBetween, 300));
+				}
+			// PATROLS_4 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
+
+
+			// FORTRESS_HEALTH_1 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
+			// Added health and damage values for each fortress instantiation
+			// Added new fortresses and set position in accordance with collisions on tiled map
+			gameObjects.add(new Fortress(new Vector2(2903, 3211), textures.getFortress(0), textures.getDeadFortress(0),
+					new Vector2(256, 218), 400, 5));
+			gameObjects.add(new Fortress(new Vector2(3200, 5681), textures.getFortress(1), textures.getDeadFortress(1),
+					new Vector2(256, 320), 500, 10));
+			gameObjects.add(new Fortress(new Vector2(2050, 1937), textures.getFortress(2), textures.getDeadFortress(2),
+					new Vector2(400, 240), 600, 15));
+			gameObjects.add(new Fortress(new Vector2(4496, 960), textures.getFortress(3), textures.getDeadFortress(3),
+					new Vector2(345, 213), 700, 20));
+			gameObjects.add(new Fortress(new Vector2(6112, 1100), textures.getFortress(4), textures.getDeadFortress(4),
+					new Vector2(300, 240), 800, 25)); //382, 319
+			gameObjects.add(new Fortress(new Vector2(600, 4000), textures.getFortress(5), textures.getDeadFortress(5),
+					new Vector2(300, 270), 900, 30)); //45, 166
+			// FORTRESS_HEALTH_1 & NEW_FORTRESSES_2 - END OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE  & ALASDAIR PILMORE-BEDFORD
 		}
-		// PATROLS_4 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
-
-
-		// FORTRESS_HEALTH_1 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
-		// Added health and damage values for each fortress instantiation
-		// Added new fortresses and set position in accordance with collisions on tiled map
-		gameObjects.add(new Fortress(new Vector2(2903,3211),textures.getFortress(0), textures.getDeadFortress(0),
-				new Vector2(256, 218), 400, 5));
-		gameObjects.add(new Fortress(new Vector2(3200,5681), textures.getFortress(1), textures.getDeadFortress(1),
-				new Vector2(256, 320), 500, 10));
-		gameObjects.add(new Fortress(new Vector2(2050,1937), textures.getFortress(2), textures.getDeadFortress(2),
-				new Vector2(400, 240), 600, 15));
-		gameObjects.add(new Fortress(new Vector2(4496,960), textures.getFortress(3), textures.getDeadFortress(3),
-				new Vector2(345, 213), 700, 20));
-		gameObjects.add(new Fortress(new Vector2(6112,1100), textures.getFortress(4), textures.getDeadFortress(4),
-				new Vector2(300, 240), 800, 25)); //382, 319
-		gameObjects.add(new Fortress(new Vector2(600,4000), textures.getFortress(5), textures.getDeadFortress(5),
-				new Vector2(300, 270), 900, 30)); //45, 166
-		// FORTRESS_HEALTH_1 & NEW_FORTRESSES_2 - END OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE  & ALASDAIR PILMORE-BEDFORD
 	}
 
 	/**
 	 * Called every frame and calls the methods to update and render the game objects, as well as handling input.
 	 */
 	public void render(float delta) {
+
 		Gdx.input.setInputProcessor(pauseWindow.stage);  //Set input processor
 		pauseWindow.stage.act();
+
 
 		switch (state) {
 			case RUN:
@@ -320,6 +345,18 @@ public class GameScreen implements Screen{
 				minigame.stage.act();
 				minigame.clickCheck();
 				break;
+
+			//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+            case SAVE: //New case for the save window
+            	Gdx.input.setInputProcessor(saveWindow.stage);
+				pauseWindow.visibility(false);
+				saveWindow.visibility(true);
+				saveWindow.stage.draw();
+				saveClickCheck();
+                break;
+			// GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
+
+
 			default:
 				break;
 		}
@@ -502,7 +539,7 @@ public class GameScreen implements Screen{
 	 */
 	public void DrawCircle(Vector2 position, float radius, int lineWidth, Color colour) {
 		// MEMORY LEAK FIX 3 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
-		// Added an if statement to fully ensure debugging view is requested as we noticed the original teams debug
+		// Added a'/n if statement to fully ensure debugging view is requested as we noticed the original teams debug
 		// code causes a memory leak and possibly crashes the game overtime.
 		if (showDebug) {
 			debugObjects.add(new DebugCircle(position, radius, lineWidth, colour));
@@ -552,6 +589,7 @@ public class GameScreen implements Screen{
 	public void resume() {
 		setGameState(GameScreenState.RESUME);
 	}
+
 
 	@Override
 	public void hide() {}
@@ -636,6 +674,7 @@ public class GameScreen implements Screen{
 			}
 		});
 	}
+	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 
 	/**
 	 * Remove one fortress to the fortressCount

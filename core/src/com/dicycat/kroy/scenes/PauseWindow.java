@@ -32,6 +32,7 @@ public class PauseWindow {
     public TextButton resume = new TextButton("RESUME", skin);
     public TextButton exit = new TextButton("EXIT", skin);
     public TextButton menu = new TextButton("MENU", skin);
+    public TextButton save = new TextButton("SAVE", skin);
 
 	public PauseWindow(Kroy game) {
 		sb = game.batch;
@@ -45,7 +46,8 @@ public class PauseWindow {
 	    table.add(menu).width(Kroy.CentreWidth());
 	    table.row();
 	    table.add(exit).width(Kroy.CentreWidth());
-	    
+	    table.row();
+	    table.add(save).width(Kroy.CentreWidth());
 		table.setFillParent(true);
 	    stage.addActor(table);
 	}
