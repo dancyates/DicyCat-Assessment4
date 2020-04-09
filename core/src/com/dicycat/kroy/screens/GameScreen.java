@@ -79,18 +79,12 @@ public class GameScreen implements Screen{
 
 	// TRUCK_SELECT_CHANGE_11 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Slightly edited trucks statistics to make the game more balanced.
-	private Float[][] initialTruckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
+	private Float[][] truckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
 			{450f, 1f, 400f, 300f},		//Speed
 			{300f, 2f, 400f, 300f},	//Flow rate
 			{300f, 1f, 500f, 300f},		//Capacity
 			{300f, 1f, 400f, 450f}		//Range
 		};
-	private Float[][] truckStats = {	//Each list is a configuration of a specific truck. {speed, flowRate, capacity, range}
-			{0f, 0f, 0f, 0f},		//Speed
-			{0f, 0f, 0f, 0f},	//Flow rate
-			{0f, 0f, 0f, 0f},		//Capacity
-			{0f, 0f, 0f, 0f}		//Range
-	};
 
 	//PowerUpAddition_Invisibility_1 - Start of Modification - DicyCat - Luke Taylor
 	private boolean playerVisible = true;
@@ -158,7 +152,7 @@ public class GameScreen implements Screen{
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
 		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
-			truckStats[i][0] = initialTruckStats[i][0] + initialTruckStats[i][0] * healthModifier;	//Modify truck health
+			truckStats[i][0] += truckStats[i][0] * healthModifier;
 		}
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
@@ -198,7 +192,7 @@ public class GameScreen implements Screen{
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
 		for (int i = 0; i < truckStats.length; i++) {	//Iterate through every truck
-			truckStats[i][0] = initialTruckStats[i][0] + initialTruckStats[i][0] * healthModifier;	//Modify truck health
+			truckStats[i][0] += truckStats[i][0] * healthModifier;
 		}
 
 		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
