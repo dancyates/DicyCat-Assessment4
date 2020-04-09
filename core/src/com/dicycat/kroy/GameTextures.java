@@ -35,6 +35,16 @@ public class GameTextures {
 
 	private String[] truckAddress = {"fireTruck1.png", "fireTruck2.png", "fireTruck3.png", "fireTruck4.png"};
 
+	//PowerUpTexture1 - Start of Modification - DicyCat - Luke Taylor
+	private Texture[] powerUpsInactive = {new Texture("Power1ActiveNot.png"),new Texture("Power2ActiveNot.png"),
+			new Texture("Power3ActiveNot.png"),new Texture("Power4ActiveNot.png"),new Texture("Power5ActiveNot.png"),
+			new Texture("Power6ActiveNot.png"),new Texture("Power7ActiveNot.png")};
+	
+	private Texture[] powerUps = {new Texture("Power1Active.png"),new Texture("Power2Active.png"),
+			new Texture("Power3Active.png"),new Texture("Power4Active.png"),new Texture("Power5Active.png"),
+			new Texture("Power6Active.png"),new Texture("Power7Active.png")};
+	//PowerUpTexture1 - End of Modification - DicyCat - Luke Taylor
+
 	public GameTextures() {
 		// TRUCK_SELECT_CHANGE_2 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		// Initialises all 4 truck texures and adds them to an array list rather than just the single texture used previously.
@@ -81,4 +91,10 @@ public class GameTextures {
 	public Texture getFireStationDead() {
 		return fireStationDead;
 	}
+
+
+	//PowerUpTexture2 - Start of modification - DicyCat - Luke Taylor
+	public Texture getActivePowerUp(int type){ return powerUps[type]; }
+	public Texture getInactivePowerUp(int type) { return powerUpsInactive[type];}
+	//PowerUpTexture2 - End of modification - DicyCat - Luke Taylor
 }
