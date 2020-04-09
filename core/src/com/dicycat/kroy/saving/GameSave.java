@@ -41,13 +41,12 @@ public class GameSave {
 	}
 
 	/**
-	 * If the index to save does not already have a GameSave that has been saved to, then this method saves the game and adds the save to savedGames
+	 * This method saves the game and adds the save to savedGames
 	 * @param indexToSaveTo The index of the save file to save to
 	 * @param difficulty Difficulty
 	 * @param spawnPos Spawn Position of the active truck
 	 * @param gameTimer The time left in the game
 	 * @param fortressCount The number of fortresses left
-	 * @return Whether the game was able to save; whether that save file already had a game saved to it or not
 	 */
 	public void saveGame(int indexToSaveTo, int difficulty, Vector2 spawnPos, float gameTimer, int fortressCount, int aliensKilled, Vector2 lastAlienDeath) {
 		this.beenSaved = true;

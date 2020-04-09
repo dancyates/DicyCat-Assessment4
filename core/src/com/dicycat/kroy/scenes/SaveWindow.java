@@ -5,19 +5,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
 import com.dicycat.kroy.saving.GameSave;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +27,6 @@ public class SaveWindow {
 
     public Stage stage;
     public Table table = new Table();
-    private SpriteBatch sb;
     private NinePatch patch = new NinePatch(new Texture("loool.jpg"), 3, 3, 3, 3);
     private NinePatchDrawable background = new NinePatchDrawable(patch);
     private static Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -45,7 +41,7 @@ public class SaveWindow {
 
 
     public SaveWindow(Kroy game) {
-        sb = game.batch;
+        SpriteBatch sb = game.batch;
         Viewport viewport = new ScreenViewport(new OrthographicCamera());
         stage = new Stage(viewport, sb);
         table.setBackground(background);
