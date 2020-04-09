@@ -182,14 +182,16 @@ public class GameScreen implements Screen{
         saveWindow.visibility(false);
 		optionsWindow = new OptionsWindow(game);
 		optionsWindow.visibility(false);
-		players = new ArrayList<>();
+		fireTrucks = new ArrayList<>();
 
 
-		//Sets spawnPosition, gametimer, fortressCount, and difficulty to the values saved in GameSave
+		//Sets spawnPosition, gametimer, fortressCount, difficulty, aliensKilled and lastAlienDeath to the values saved in GameSave
 		spawnPosition = savedGame.getSpawnPos();
 		gameTimer = savedGame.getGameTimer();
 		fortressesCount = savedGame.getFortressCount();
 		difficulty = savedGame.getDifficulty();
+		aliensKilled = savedGame.getAliensKilled();
+		lastAlienDeath = savedGame.getLastAlienDeath();
 
 		hud = new HUD(game.batch, gameTimer);
 
@@ -202,7 +204,7 @@ public class GameScreen implements Screen{
 		textures = new GameTextures(); // removed truckNum from GameTextures constructor call
 
 		gameObjects.addAll(savedGame.getGameObjects()); //Adds all the saved game objects back into the game
-		players.addAll(savedGame.getPlayers());
+		fireTrucks.addAll(savedGame.getPlayers());
 	}
 	//GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
 
@@ -216,22 +218,22 @@ public class GameScreen implements Screen{
 		// TRUCK_SELECT_CHANGE_13 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		// Adds all the different firetruck types to the players ArrayList
 
-		if (players.isEmpty()) { //If players have already been copied from a save file they do not need to be added
-			players.add(new FireTruck(new Vector2(spawnPosition.x + 50, spawnPosition.y), truckStats[0], 0));
-			players.add(new FireTruck(new Vector2(spawnPosition.x - 50, spawnPosition.y), truckStats[1], 1));
-			players.add(new FireTruck(new Vector2(spawnPosition.x, spawnPosition.y), truckStats[2], 2));
-			players.add(new FireTruck(new Vector2(spawnPosition.x, spawnPosition.y - 50), truckStats[3], 3));
+		if (fireTrucks.isEmpty()) { //If players have already been copied from a save file they do not need to be added
+			fireTrucks.add(new FireTruck(new Vector2(spawnPosition.x + 50, spawnPosition.y), truckStats[0], 0));
+			fireTrucks.add(new FireTruck(new Vector2(spawnPosition.x - 50, spawnPosition.y), truckStats[1], 1));
+			fireTrucks.add(new FireTruck(new Vector2(spawnPosition.x, spawnPosition.y), truckStats[2], 2));
+			fireTrucks.add(new FireTruck(new Vector2(spawnPosition.x, spawnPosition.y - 50), truckStats[3], 3));
 		}
 
 
 		// Iterates through the players array lists and adds them to gameObjects.
 		if (gameObjects.isEmpty()) {
-			for (FireTruck truck : players) {
+			for (FireTruck truck : fireTrucks) {
 				gameObjects.add(truck);    //Player
 			}
 
 			// Sets initial camera position to the active truck's position (set to arbitrary truck at the beginning of the game)
-			gamecam.translate(new Vector2(players.get(activeTruck).getX(), players.get(activeTruck).getY())); // sets initial Camera position
+			gamecam.translate(new Vector2(fireTrucks.get(activeTruck).getX(), fireTrucks.get(activeTruck).getY())); // sets initial Camera position
 			// TRUCK_SELECT_CHANGE_13 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
 			gameObjects.add(new FireStation());
@@ -660,10 +662,17 @@ public class GameScreen implements Screen{
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
                     saveGame(finalI);
-                    setGameState(GameScreenState.RESUME);
-                }
+				}
 			});
 		}
+		saveWindow.back.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				saveWindow.visibility(false);
+				pauseWindow.visibility(true);
+				pause();
+			}
+		});
 	}
 	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 
@@ -771,20 +780,19 @@ public class GameScreen implements Screen{
 
 	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
 	/**
-	 * @param indexToSave The index to save the game to
-	 * @return Whether or not the game was successfully saved
+	 * @param indexToSave The index to save the game to.
 	 */
 	public void saveGame(int indexToSave) {
-
-		if (currentSave.saveGame(indexToSave, difficulty, players.get(activeTruck).getPosition(),gameTimer,fortressesCount)){
+		if (!GameSave.getSavedGames().get(indexToSave).hasBeenSaved()){ //Only saves if the save slot does not already have a game saved to it
+			currentSave.saveGame(indexToSave, difficulty, fireTrucks.get(activeTruck).getPosition(), gameTimer, fortressesCount, aliensKilled, lastAlienDeath);
 			for(GameObject gameObject : gameObjects){
 				currentSave.addGameObject(gameObject);
 			}
-			for(FireTruck player : players) {
+			for(FireTruck player : fireTrucks) {
 				currentSave.addPlayer(player);
 			}
 		}
-
+		saveWindow.update();
 	}
 	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
 }

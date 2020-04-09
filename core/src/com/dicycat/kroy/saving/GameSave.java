@@ -20,6 +20,8 @@ public class GameSave {
 	private int difficulty;
 	private float gameTimer;
 	private int fortressCount;
+	private int aliensKilled;
+	private Vector2 lastAlienDeath;
 	private static List<GameSave> savedGames = Arrays.asList(new GameSave(), new GameSave(), new GameSave()); //A static list that contains all three instances of GameSave for each of the three save files
 	private Boolean beenSaved; //Variable that stores whether or not the saveGame() method has been called for that instance of GameSave
 
@@ -47,18 +49,15 @@ public class GameSave {
 	 * @param fortressCount The number of fortresses left
 	 * @return Whether the game was able to save; whether that save file already had a game saved to it or not
 	 */
-	public Boolean saveGame(int indexToSaveTo, int difficulty, Vector2 spawnPos, float gameTimer, int fortressCount) {
-
-		if (!savedGames.get(indexToSaveTo).hasBeenSaved()){
-			this.beenSaved = true;
-			this.spawnPos = spawnPos;
-			this.difficulty = difficulty;
-			this.gameTimer = gameTimer;
-			this.fortressCount = fortressCount;
-			savedGames.set(indexToSaveTo,this);
-			return true;
-		}
-		return false;
+	public void saveGame(int indexToSaveTo, int difficulty, Vector2 spawnPos, float gameTimer, int fortressCount, int aliensKilled, Vector2 lastAlienDeath) {
+		this.beenSaved = true;
+		this.spawnPos = spawnPos;
+		this.difficulty = difficulty;
+		this.gameTimer = gameTimer;
+		this.fortressCount = fortressCount;
+		this.aliensKilled = aliensKilled;
+		this.lastAlienDeath = lastAlienDeath;
+		savedGames.set(indexToSaveTo,this);
 	}
 
 	//Getters:
@@ -89,6 +88,14 @@ public class GameSave {
 		return fortressCount;
 	}
 
+	public int getAliensKilled() {
+		return aliensKilled;
+	}
+
+	public Vector2 getLastAlienDeath() {
+		return lastAlienDeath;
+	}
+
 	public Boolean hasBeenSaved(){
 		return beenSaved;
 	}
@@ -102,6 +109,5 @@ public class GameSave {
 	public void addPlayer(FireTruck newPlayer) {
 		this.players.add(newPlayer);
 	}
-
 
 }
