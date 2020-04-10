@@ -789,8 +789,4 @@ public class GameScreen implements Screen{
 		saveWindow.update();
 	}
 	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
-
-	public ArrayList<FireTruck> getTrucks(){
-		return this.fireTrucks;
-	}
 }
