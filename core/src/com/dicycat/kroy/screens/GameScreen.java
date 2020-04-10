@@ -112,7 +112,7 @@ public class GameScreen implements Screen{
 		// FIRESTATION_RANGE_FIX_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		gameTimer = 60 * 15; //Set timer to 15 minutes
 		hud = new HUD(game.batch, gameTimer);
-		players = new ArrayList<>(); // Initialise the array which will contain the 4 fire trucks
+		players = new ArrayList<FireTruck>(); // Initialise the array which will contain the 4 fire trucks
 
 	}
 	// TRUCK_SELECT_CHANGE_12 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
@@ -560,4 +560,8 @@ public class GameScreen implements Screen{
 		players.get(activeTruck).setSelected(true);
 	}
 	// TRUCK_SELECT_CHANGE_18 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+	public ArrayList<FireTruck> getPlayers(){
+		return this.players;
+	}
 }

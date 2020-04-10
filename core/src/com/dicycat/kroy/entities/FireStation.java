@@ -45,6 +45,9 @@ public class FireStation extends Entity {
 			HUD.refillVisible = true;
 			Kroy.mainGameScreen.getPlayer().repairTruck();
 			if (!Kroy.mainGameScreen.getPlayer().isFull() && Gdx.input.isKeyPressed(Input.Keys.R)) {
+				for(FireTruck x : Kroy.mainGameScreen.getPlayers()){
+					x.refillWater();
+				}
 				Kroy.mainGameScreen.getPlayer().refillWater();
 				Kroy.mainGameScreen.newMinigame();
 				Kroy.mainGameScreen.setGameState(GameScreen.GameScreenState.MINIGAME);
