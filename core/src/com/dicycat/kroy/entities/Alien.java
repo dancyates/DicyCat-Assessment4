@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * A mobile Alien which follows a predefined patrol coordinate path and will stop and attack
  * the player if the player is within range.
- * 
+ *
  * @author Lucy Ivatt
  */
 public class Alien extends Entity {
@@ -76,14 +76,18 @@ public class Alien extends Entity {
 				setPosition(new Vector2(moveAlongPatrol(waypoints[currentWaypoint])));
 		}
 
+		//PowerUpAddition_Invisibility_4 - Start of Modification - DicyCat - Luke Taylor
+
 		// If player in radius then shoots bullets towards them
 		Bullet[] toShoot = dispenser.update(playerInRadius());
-		if (toShoot != null) {
+		if (toShoot != null && Kroy.mainGameScreen.isPlayerVisible()) { // CHANGE : This line is changed to check that the player is visible
 			for (Bullet bullet : toShoot) {
 				bullet.fire(getCentre());
 				Kroy.mainGameScreen.addGameObject(bullet);
 			}
 		}
+
+		//PowerUpAddition_Invisibility_4 - End of Modification - DicyCat - Luke Taylor
 	}
 
 	/**
@@ -132,4 +136,22 @@ public class Alien extends Entity {
 			}
 		}
 	}
+	public void applyDamage(float damage) {
+		if (damage < 0){
+			throw new IllegalArgumentException("applyDamage(float damage) cannot be passed a negative float");
+		}
+		currentHealthPoints -= damage;
+		if (currentHealthPoints <= 0) {
+			die();
+		}
+	}
+
+	//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
+	@Override
+	public void die() {
+		super.die();
+		Kroy.mainGameScreen.setAliensKilled(Kroy.mainGameScreen.getAliensKilled()+1);
+		Kroy.mainGameScreen.setLastAlienDeath(getPosition());
+	}
+	//Aliens_Killed_CHANGE - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 }

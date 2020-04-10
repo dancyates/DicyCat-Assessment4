@@ -2,11 +2,14 @@ package com.dicycat.kroy.scenes;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
@@ -16,7 +19,7 @@ import static java.lang.Math.abs;
 
 /**
  * HUD window
- * 
+ *
  * @author Michele Imbriani
  *
  */
@@ -37,7 +40,7 @@ public class HUD {
 	// Added attribute for the timer that shows on screen - set to 15 minutes
 	private float screenTimer;
 	// SCREEN_COUNTDOWN_1 - END OF MODIFICATION - NP STUDIOS
-	
+
 	private Label scoreLabel;
 	private Label timeLabel;
 	private Label fortressLabel;
@@ -45,16 +48,21 @@ public class HUD {
 	private Label scoreCountLabel;
 	private Label fortressCountLabel;
 	private Label refillPrompt;
+	//PowerUpAddition_HUD_1 - Start of Modification - DicyCat - Luke Taylor
+	private Image currentPowerUpLabel;
+	private Label powerUpLabel;
+//	private Integer currentPowerUpSelected = ;
+	//PowerUpAddition_HUD_1 - End of Modification - DicyCat - Luke Taylor
 
-	
-	
+
+
 	/**
 	 */
 	public HUD(SpriteBatch sb, float timeLimit) {
 		screenTimer = timeLimit;
 		viewport = new ScreenViewport(new OrthographicCamera());
-		stage = new Stage(viewport, sb);	//Where we are going to put the HUD elements 
-		
+		stage = new Stage(viewport, sb);	//Where we are going to put the HUD elements
+
 		Table tableHUD = new Table();	//this allows to put widgets in the scene in a clean and ordered way
 		tableHUD.top();	// puts widgets from the top instead of from the centre
 		tableHUD.setFillParent(true);	//makes the table the same size of the stage
@@ -71,6 +79,17 @@ public class HUD {
 		fortressLabel = new Label("FORTRESSES REMAINING:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		fortressCountLabel = new Label(String.format("%01d", 6), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		// FORTRESS_COUNT_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
+
+		//PowerUpAddition_HUD_2 - Start of Modification - DicyCat - Luke Taylor
+
+		powerUpLabel = new Label("CURRENT POWER UP: ",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+//		currentPowerUpLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+		currentPowerUpLabel = new Image(new TextureRegionDrawable(new Texture("Power1ActiveNot.png")));
+
+		tableHUD.add(powerUpLabel).expandX().padTop(10);
+		tableHUD.add(currentPowerUpLabel).padTop(10);
+
+		//PowerUpAddition_HUD_2 - End of Modification - DicyCat - Luke Taylor
 		refillPrompt = new Label("PRESS 'R' TO REFILL!", new Label.LabelStyle(new BitmapFont(), Color.RED));
 
 		tableHUD.add(timeLabel).expandX().padTop(10);
@@ -82,11 +101,11 @@ public class HUD {
 		tableHUD.add(fortressCountLabel).expandX().padTop(10);
 		// FORTRESS_COUNT_2 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		tableHUD.add(refillPrompt).expandX().padTop(10);
-		
+
 		stage.addActor(tableHUD);
-		
+
 	}
-	
+
 	/**
 	 * Increments the timer using delta time so that it will count up in seconds. Updates the labels in the HUD:
 	 * the timer label, the score label and the fortress count label
@@ -107,6 +126,12 @@ public class HUD {
 		// Updates the count depending on the amount of fortresses still alive
 		fortressCountLabel.setText(String.format("%01d", Kroy.mainGameScreen.getFortressesCount()));
 		// FORTRESS_COUNT_3 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
+
+		//PowerUpAddition_HUD_3 - Start of Modification - DicyCat - Luke Taylor
+
+		currentPowerUpLabel.setDrawable(new TextureRegionDrawable(Kroy.mainGameScreen.getPlayer().getSelectedPowerUpTexture()));
+
+		//PowerUpAddition_HUD_3 - End of Modification - DicyCat - Luke Taylor
 		if(refillVisible){
 			refillPrompt.setText(String.format("PRESS 'R' TO REFILL!"));
 		}
@@ -129,4 +154,3 @@ public class HUD {
 	public void updateScore(Integer x){ score += x; }
 
 }
-

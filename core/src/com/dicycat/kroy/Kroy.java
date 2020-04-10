@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.dicycat.kroy.saving.GameSave;
 import com.dicycat.kroy.screens.GameScreen;
 import com.dicycat.kroy.screens.MenuScreen;
 
@@ -58,10 +59,22 @@ public class Kroy extends Game {
 	// TRUCK_SELECT_CHANGE_4- START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// Deleted truck num parameter as it is no longer needed because the user starts with 1 of each truck rather than
 	// choosing one and having multiple lives.
-	public void newGame() {
-		mainGameScreen = new GameScreen(this);// Initialise new game
+	// DicyCat Assessment 4 - Added difficulty parameter
+	public void newGame(int difficulty) {
+		mainGameScreen = new GameScreen(this, difficulty);// Initialise new game
 	// TRUCK_SELECT_CHANGE_4 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 		setScreen(mainGameScreen);// Display new game
+	}
+
+
+	//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * Alternative version of gameSave which creates a new game using a saved game
+	 * @param gameSave A saved game to launch the game using.
+	 */
+	public void newGame(GameSave gameSave){
+		mainGameScreen = new GameScreen(this, gameSave);
+		setScreen(mainGameScreen);
 	}
 
 	/**
