@@ -139,7 +139,7 @@ public class GameScreen implements Screen{
 		spawnPosition = new Vector2(234 * 16, 3900);
 		// FIRESTATION_RANGE_FIX_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		gameTimer = 60 * 15; //Set timer to 15 minutes
-		hud = new HUD(game.batch, gameTimer);
+		hud = new HUD(game.batch, gameTimer, 0);
 		//Aliens_Killed_CHANGE - START OF MODIFICATION - DICY CAT - Isaac Albiston----
 		aliensKilled = 0;
 		lastAlienDeath = Vector2.Zero;
@@ -187,7 +187,7 @@ public class GameScreen implements Screen{
 		aliensKilled = savedGame.getAliensKilled();
 		lastAlienDeath = savedGame.getLastAlienDeath();
 
-		hud = new HUD(game.batch, gameTimer);
+		hud = new HUD(game.batch, gameTimer, savedGame.getScore()); //creates a new HUD using the score saved in GameSave
 
 		float healthModifier = (1 - difficulty); //Map difficulty between -1 & 1
 		healthModifier /= 2; //Reduce the impact to the desired amount
@@ -778,7 +778,7 @@ public class GameScreen implements Screen{
 	 */
 	public void saveGame(int indexToSave) {
 		if (!GameSave.getSavedGames().get(indexToSave).hasBeenSaved()){ //Only saves if the save slot does not already have a game saved to it
-			currentSave.saveGame(indexToSave, difficulty, fireTrucks.get(activeTruck).getPosition(), gameTimer, fortressesCount, aliensKilled, lastAlienDeath);
+			currentSave.saveGame(indexToSave, difficulty, fireTrucks.get(activeTruck).getPosition(), gameTimer, fortressesCount, aliensKilled, lastAlienDeath, hud.getFinalScore());
 			for(GameObject gameObject : gameObjects){
 				currentSave.addGameObject(gameObject);
 			}

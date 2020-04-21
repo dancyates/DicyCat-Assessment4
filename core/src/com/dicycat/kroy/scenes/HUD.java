@@ -34,7 +34,7 @@ public class HUD {
 	public static float timer = 0;
 	// FORTRESS_IMPROVE_2 - END OF MODIFICATION - NP STUDIOS
 
-	private Integer score = 0;
+	private Integer score;
 
 	// SCREEN_COUNTDOWN_1 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE
 	// Added attribute for the timer that shows on screen - set to 15 minutes
@@ -58,7 +58,8 @@ public class HUD {
 
 	/**
 	 */
-	public HUD(SpriteBatch sb, float timeLimit) {
+	public HUD(SpriteBatch sb, float timeLimit, int score) {
+		this.score = score;
 		screenTimer = timeLimit;
 		viewport = new ScreenViewport(new OrthographicCamera());
 		stage = new Stage(viewport, sb);	//Where we are going to put the HUD elements
