@@ -1,5 +1,5 @@
 package com.dicycat.kroy.screens;
-  
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -16,11 +16,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
 import com.dicycat.kroy.misc.Button;
+import com.dicycat.kroy.saving.GameSave;
 import com.dicycat.kroy.scenes.ControlsWindow;
 import com.dicycat.kroy.scenes.FireTruckSelectionScene;
 import com.dicycat.kroy.minigame.Minigame;
 import com.dicycat.kroy.scenes.OptionsWindow;
-  
+import com.dicycat.kroy.scenes.SaveWindow;
+
+import static com.dicycat.kroy.scenes.SaveWindow.saveButtons;
+
 /**
  * Main Menu screen
  * 
@@ -43,7 +47,8 @@ public class MenuScreen implements Screen{
   	exitButtonTexture, 
   	exitButtonActiveTexture, 
   	minigameButtonTexture, 
-  	minigameButtonActiveTexture, 
+  	minigameButtonActiveTexture,
+	loadButtonTexture,
 // REFACTOR_CHANGE_1 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER -----
 
 	// CONTROL_SCREEN_1 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER ---
@@ -61,9 +66,9 @@ public class MenuScreen implements Screen{
   // CONTROL_SCREEN_ 2 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
   	// creating an instance of the ControlsWindow class
   private ControlsWindow controlsWindow; 
-  // CONTROL_SCREEN_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+// CONTROL_SCREEN_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+  private SaveWindow loadWindow;
 
-  
   public static Music music = Gdx.audio.newMusic(Gdx.files.internal("gamemusic.mp3"));
   public static float musicVolume = 0.4f;
 
@@ -80,6 +85,8 @@ public class MenuScreen implements Screen{
   private int controlsButtonY = (Kroy.height/2)-150;
   // CONTROL_SCREEN_3 END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
   private int exitButtonY = (Kroy.height/2)-225;
+
+  private int loadButtonY = (Kroy.height/2)-300; //mcnew
   
   private Pixmap pm = new Pixmap(Gdx.files.internal("handHD2.png")); //cursor
   private int xHotSpot = pm.getWidth() / 3;	//where the cursor's aim is 
@@ -98,13 +105,14 @@ public class MenuScreen implements Screen{
 	  OPTIONS,
 	  MINIGAME,
 	  // CONTROL_SCREEN_4 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
-	  CONTROLS // adding a new window state, the controls window, has the code that calls the creation and setup of the controls window
+	  CONTROLS, // adding a new window state, the controls window, has the code that calls the creation and setup of the controls window
 	  // CONTROL_SCREEN_4 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
+	  LOAD //New state for the load screen
   }
   
   public MenuScreenState state = MenuScreenState.MAINMENU;
 
-  public MenuScreen(Kroy game) { 
+  public MenuScreen(Kroy game) {
 	  this.game = game; 
 	  exitButtonTexture = new Texture("EXIT.png"); 	//in later stages we could also have buttonActive and buttonInactive
 	  exitButtonActiveTexture = new Texture("exitActive.png");
@@ -114,6 +122,7 @@ public class MenuScreen implements Screen{
 	  playButtonActiveTexture = new Texture("newActive.png");
 	  minigameButtonTexture = new Texture("minigame.png");
 	  minigameButtonActiveTexture = new Texture("minigameActive.png");
+	  loadButtonTexture = new Texture("loadgame.png");
 
 	// CONTROL_SCREEN_5 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER
 	  controlsButtonTexture = new Texture("controls.png"); // control button texture
@@ -136,6 +145,9 @@ public class MenuScreen implements Screen{
 	  optionsWindow = new OptionsWindow(game);
 	  optionsWindow.visibility(false);
 
+	  loadWindow = new SaveWindow(game);
+	  loadWindow.visibility(false);
+
 	  minigame = new Minigame(game, false);
 	  minigame.visibility(false);
 	  
@@ -155,7 +167,9 @@ public class MenuScreen implements Screen{
   public void render(float delta) { 
 	  
 	  switch(state) {
-		  case MAINMENU:	// Display all buttons and the main menu		  
+		  case MAINMENU: // Display all buttons and the main menu
+
+
 			  stage.act();	//allows the stage to interact with user input
 			  
 			  game.batch.setProjectionMatrix(gamecam.combined);
@@ -164,8 +178,8 @@ public class MenuScreen implements Screen{
 			  Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, xHotSpot, yHotSpot));
 			  game.batch.draw(background, 0, 0);
 			 
-			  game.batch.draw(minigameButtonTexture, xAxisCentred, minigameButtonY, buttonWidth, buttonHeight);
-			
+			  //game.batch.draw(minigameButtonTexture, xAxisCentred, minigameButtonY, buttonWidth, buttonHeight);
+			  game.batch.draw(loadButtonTexture,xAxisCentred,loadButtonY,buttonWidth,buttonHeight);
 			
 			  // REFACTOR_CHANGE_2 - START OF MODIFICATION - NP STUDIOS - JORDAN SPOONER ------------------------------------------------------------------
 			  
@@ -208,7 +222,12 @@ public class MenuScreen implements Screen{
 				  optionsWindow.visibility(true);
 				  setGameState(MenuScreenState.OPTIONS);
 			  }
-			  
+
+			  Button loadButton = new Button(loadButtonY,loadButtonTexture,loadButtonTexture,game);
+			  if (loadButton.buttonAction()) {
+				  loadWindow.update();
+				  setGameState(MenuScreenState.LOAD);
+			  }
 			  // REFACTOR_CHANGE_2 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER --------------------------------------------------------------------
 			 
 			  
@@ -257,8 +276,21 @@ public class MenuScreen implements Screen{
 		  	  controlsWindow.stage.draw(); // draw the window
 		  	  controlsWindow.clickCheck(); // constantly check for user inputs from the mouse
 		  	  break;
-		  // CONTROL_SCREEN_7 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER --------------------------------------------------------------------
+		  // CONTROL_SCREEN_7 - END OF MODIFICATION - NP STUDIOS - JORDAN SPOONER -------------------------------------------------------------------
+
+		  //SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+		  //New state for the load window
+		  case LOAD:
+			  Gdx.input.setInputProcessor(loadWindow.stage); //Set inputs from the user to be valid only for the load window
+			  loadWindow.visibility(true);
+			  loadWindow.stage.act();
+			  loadWindow.stage.draw();
+			  loadClickCheck(); //Check for user inputs from the mouse
+			  break;
 		  }
+		  //SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
+
+
   	}
 
 	public void setGameState(MenuScreenState state){
@@ -298,6 +330,32 @@ public class MenuScreen implements Screen{
 	}
 
 
+	//SAVE_GAME - START OF MODIFICATION - MARTHA CARTWRIGHT
+	/**
+	 * Checks the load window buttons for input.
+	 */
+	private void loadClickCheck (){
+		for (int i = 0; i <= 2; i++) {
+			final int finalI = i;
+			saveButtons.get(i).addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					if (GameSave.getSavedGames().get(finalI).hasBeenSaved()) { //If save slot corresponding to the button the user pressed has a saved game in it
+						startGame(GameSave.getSavedGames().get(finalI)); //
+					}
+				}
+			});
+			loadWindow.back.addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					loadWindow.visibility(false);
+					Kroy.mainMenuScreen.state = MenuScreen.MenuScreenState.MAINMENU;
+				}
+			});
+		}
+	}
+	//SAVE_GAME - END OF MODIFICATION - MARTHA CARTWRIGHT
+
 	/**
 	 * If the game isn't currently running, creates a new game
  	 */
@@ -311,6 +369,15 @@ public class MenuScreen implements Screen{
 		 }
 	}
 	// TRUCK_SELECT_CHANGE_20 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
+
+	//GAME_SAVE - START OF MODIFICATION - MARTHA CARTWRIGHT
+	public void startGame(GameSave gameSave){ //Alternative version of startGame that uses a saved game
+		if (!currentlyRunningGame) {	// Checks if a new GameScren is currently running and either makes one or ignores the commands
+			currentlyRunningGame = true; // Makes sure that only one GameScreen is opened at once
+			game.newGame(gameSave); // Calls the function in Kroy to start a new game
+		}
+	}
+	//GAME_SAVE - END OF MODIFICATION - MARTHA CARTWRIGHT
 
   public void setCurrentlyRunningGame(boolean state) {
 	  currentlyRunningGame = state;

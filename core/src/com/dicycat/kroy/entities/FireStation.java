@@ -1,8 +1,11 @@
 package com.dicycat.kroy.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.dicycat.kroy.Kroy;
+import com.dicycat.kroy.scenes.HUD;
 import com.dicycat.kroy.screens.GameScreen;
 
 /**
@@ -39,13 +42,21 @@ public class FireStation extends Entity {
 	 */
 	public void update(){
 		if(playerInRadius()){
+			HUD.refillVisible = true;
 			Kroy.mainGameScreen.getPlayer().repairTruck();
-			if (!Kroy.mainGameScreen.getPlayer().isFull()) {
+			if (!Kroy.mainGameScreen.getPlayer().isFull() && Gdx.input.isKeyPressed(Input.Keys.R)) {
+				for(FireTruck x : Kroy.mainGameScreen.getTrucks()){
+					x.refillWater();
+				}
 				Kroy.mainGameScreen.getPlayer().refillWater();
 				Kroy.mainGameScreen.newMinigame();
 				Kroy.mainGameScreen.setGameState(GameScreen.GameScreenState.MINIGAME);
 			}
 		}
+		else{
+			HUD.refillVisible = false;
+		}
+
 		if (Kroy.mainGameScreen.gameTimer <= 0) {		//Once timer is over
 			applyDamage(100);	//Destroy fire station
 		}
