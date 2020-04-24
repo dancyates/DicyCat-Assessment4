@@ -24,19 +24,9 @@ public class FireTruckSelectionScene {
 	public Stage stage;
 	public Table table = new Table();
 	private SpriteBatch sb;
-	private NinePatchDrawable background = new NinePatchDrawable(new NinePatch(new Texture("Grey.png"), 3, 3, 3, 3));
+	private NinePatchDrawable background = new NinePatchDrawable(new NinePatch(new Texture("instructions.png"), 3, 3, 3, 3));
 	
     private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    
-    //Buttons initialised, labelled and stylised
-	// TRUCK_SELECT_CHANGE_9 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
-	// Changed truck selection buttons to labels to show the user which colour firetruck has the stat boost, rather than
-	// let them pick a firetruck. Added a button to start the game.
-    public Label truck1 = new Label("Speed", skin);
-    public Label truck2 = new Label("Damage", skin);
-    public Label truck3 = new Label("Capacity", skin);
-    public Label truck4 = new Label("Range", skin);
-	// TRUCK_SELECT_CHANGE_9 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
 	// DicyCat Assessment 4 - Split start button into 3 options to allow for difficulty selection
 	public TextButton startGameButtonEasy = new TextButton("Start Game (Easy)", skin);
@@ -53,27 +43,7 @@ public class FireTruckSelectionScene {
 
 		table.setBackground(background);
 		
-		// Images added to the screen
-		table.add(new Image(new Texture("fireTruck1.png")));
-		table.add(new Image(new Texture("fireTruck2.png")));
-		table.add(new Image(new Texture("fireTruck3.png")));
-		table.add(new Image(new Texture("fireTruck4.png")));
-		
 		table.row();
-
-		// TRUCK_SELECT_CHANGE_10 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
-		// Set the text align of the labels to be in the center
-	    truck1.setAlignment(Align.center);
-		truck2.setAlignment(Align.center);
-		truck3.setAlignment(Align.center);
-		truck4.setAlignment(Align.center);
-		
-		// Buttons added to the screen - New: Added padding to the bottom of each cell.
-		table.add(truck1).width(centre/3.0f).pad(0,0,50,0);
-	    table.add(truck2).width(centre/3.0f).pad(0,0,50,0);
-	    table.add(truck3).width(centre/3.0f).pad(0,0,50,0);
-	    table.add(truck4).width(centre/3.0f).pad(0,0,50,0);
-		// TRUCK_SELECT_CHANGE_10 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
 	    table.row(); // Added a new row to the table
 
