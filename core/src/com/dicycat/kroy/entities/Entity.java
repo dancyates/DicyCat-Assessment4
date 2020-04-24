@@ -22,6 +22,7 @@ public abstract class Entity extends GameObject{
 	 * @param img The texture of the entity.
 	 * @param imSize Size of the entity. Can be used to resize large/small textures
 	 * @param health Hit points of the entity
+	 * @param radius Radius the enemy can fire
 	 */
 	// RANGE - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
 	// Added radius to entity constructor to be able to change the value from the hardcoded 500.

@@ -402,6 +402,7 @@ public class GameScreen implements Screen{
 		//Aliens_Killed_Change_1 - START OF MODIFICATION - DICY CAT - Isaac Albiston----
 		if (((aliensKilled % 3) == 0) && (aliensKilled > 0)){
 			spawnPowerUp();
+			aliensKilled = 0;
 		}
 		//Aliens_Killed_Change_1 - END OF MODIFICATION - DICY CAT - Isaac Albiston----
 

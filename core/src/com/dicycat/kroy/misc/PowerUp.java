@@ -1,5 +1,7 @@
 package com.dicycat.kroy.misc;
 
+import java.util.Random;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Intersector;
@@ -20,7 +22,8 @@ public class PowerUp extends GameObject {
     }
 
     public static int generatePowerUpType(){
-        return 0;
+        Random r = new Random();
+        return r.nextInt(8);
     }
 
     public void update() {
