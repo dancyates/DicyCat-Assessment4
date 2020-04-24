@@ -287,17 +287,6 @@ public class GameScreen implements Screen{
 	 * Respawns the player if necessary.
 	 */
 	private void updateLoop() {
-
-		//Temp
-		int[] keys = {Keys.NUM_0,Keys.NUM_1,Keys.NUM_2,Keys.NUM_3,Keys.NUM_4,Keys.NUM_5,Keys.NUM_6,Keys.NUM_7};
-		for (int i = 0; i < 8; i++ ) {
-			if (Gdx.input.isKeyJustPressed(keys[i])) {
-				spawnPowerUp(i);
-			}
-		}
-
-		//Temp
-
 		List<GameObject> toRemove = new ArrayList<GameObject>();
 		for (GameObject gObject : gameObjects) {	//Go through every game object
 			gObject.update();						//Update the game object
@@ -366,12 +355,6 @@ public class GameScreen implements Screen{
 	public void spawnPowerUp(){
 		int type = PowerUp.generatePowerUpType();
 		gameObjects.add(new PowerUp(lastAlienDeath, textures.getActivePowerUp(type), type));
-	}
-
-
-	public void spawnPowerUp(int type) {
-		gameObjects.add(new PowerUp(getPlayer().getPosition().add(0, 100), textures.getActivePowerUp(type-1), type-1));
-
 	}
 	//Aliens_Killed_Change_2 - End of Modification - DICYCAT - Luke Taylor
 

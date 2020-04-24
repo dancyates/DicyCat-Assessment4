@@ -65,7 +65,7 @@ public class FireTruck extends Entity{
 	}
 
 	private PowerUp[] powerUps = {
-			PowerUp.NULL,				//1 powerUps[0] - Boolean for invincibility - Done tested informally
+			PowerUp.NULL,				//1 powerUps[0] - invincibility - Done tested informally
 			PowerUp.NULL,				//2 powerUps[1] - Multiple attacks - Done tested informally
 			PowerUp.NULL,				//3 powerUps[2] - Damage increase	 - Done	tested informally
 			PowerUp.NULL,				//4 powerUps[3] - Smaller Truck - Done tested informally

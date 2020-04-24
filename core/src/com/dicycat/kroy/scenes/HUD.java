@@ -81,7 +81,6 @@ public class HUD {
 		//PowerUpAddition_HUD_2 - Start of Modification - DicyCat - Luke Taylor
 		
 		powerUpLabel = new Label("CURRENT POWER UP: ",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-//		currentPowerUpLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		currentPowerUpLabel = new Image(new TextureRegionDrawable(new Texture("Power1ActiveNot.png")));
 		
 		tableHUD.add(powerUpLabel).expandX().padTop(10);
@@ -125,7 +124,6 @@ public class HUD {
 		// FORTRESS_COUNT_3 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		
 		//PowerUpAddition_HUD_3 - Start of Modification - DicyCat - Luke Taylor
-		
 		currentPowerUpLabel.setDrawable(new TextureRegionDrawable(Kroy.mainGameScreen.getPlayer().getSelectedPowerUpTexture()));
 		
 		//PowerUpAddition_HUD_3 - End of Modification - DicyCat - Luke Taylor
