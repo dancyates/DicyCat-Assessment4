@@ -125,3 +125,14 @@ Thumbs.db
 !/ios-moe/xcode/*.xcodeproj/xcshareddata
 !/ios-moe/xcode/*.xcodeproj/project.pbxproj
 /ios-moe/xcode/native/
+tests/build/reports/tests/test/packages/default-package.html
+tests/build/test-results/test/binary/output.bin
+tests/build/test-results/test/binary/output.bin.idx
+tests/build/test-results/test/binary/results.bin
+tests/build/test-results/test/TEST-BulletDispenserTest.xml
+tests/build/tmp/test/
+tests/build/reports/tests/test/classes/BulletDispenserTest.html
+tests/build/reports/tests/test/css/base-style.css
+tests/build/reports/tests/test/css/style.css
+tests/build/reports/tests/test/index.html
+tests/build/reports/tests/test/js/report.js
