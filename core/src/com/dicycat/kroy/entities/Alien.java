@@ -26,7 +26,7 @@ public class Alien extends Entity {
 	public Alien(int patrolNumber, float movementCountdown, int radius) {
 		// Edited Entity constructor to include radius so that alien radius can be changed.
 		super(new Vector2(0, 0), Kroy.mainGameScreen.textures.getUFO(),
-				new Vector2(80, 80), 500, radius);
+				new Vector2(80, 80), 250, radius);
 
 		// Sets waypoints variable to be equal to the right array of pre-defined coordinates.
 		if (patrolNumber == 1) {

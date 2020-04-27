@@ -23,7 +23,7 @@ public class PowerUp extends GameObject {
 
     public static int generatePowerUpType(){
         Random r = new Random();
-        return r.nextInt(8);
+        return r.nextInt(7);
     }
 
     public void update() {
