@@ -208,11 +208,11 @@ public class FireTruck extends Entity{
 					Gdx.input.isKeyPressed(LETTERKEYS[0]) ||
 					Gdx.input.isKeyPressed(LETTERKEYS[1]) ||
 					Gdx.input.isKeyPressed(LETTERKEYS[2]) ||
-					Gdx.input.isKeyPressed(LETTERKEYS[3])||// Runs movement code if any arrow key pressed or if the teleporation powerup has been activated
+					Gdx.input.isKeyPressed(LETTERKEYS[3]) ||// Runs movement code if any arrow key pressed or if the teleporation powerup has been activated
 
 					//PowerUpAddition_Teleportation_4 - Start of Modification - DicyCat - Luke Taylor
 					powerUps[6] == PowerUp.ACTIVE) {
-					//PowerUpAddition_Teleportation_4 - End of Modification - DicyCat - Luke Taylor) { // Runs movement code if any arrow key pressed
+				//PowerUpAddition_Teleportation_4 - End of Modification - DicyCat - Luke Taylor) { // Runs movement code if any arrow key pressed
 				// End of modification - Alternative Movement Controls 2.4
 
 				direction = updateDirection(); // updates direction based on current keyboard input
@@ -220,29 +220,30 @@ public class FireTruck extends Entity{
 				Kroy.mainGameScreen.updateCamera(); // Updates the screen position to always have the truck roughly centre
 			}
 			Kroy.mainGameScreen.updateCamera(); // Updates the screen position to always have the truck roughly centre
+		}
 
-			//player firing
-			ArrayList<GameObject> inRange = entitiesInRange();		//find list of enemies in range
+		//player firing
+		ArrayList<GameObject> inRange = entitiesInRange();		//find list of enemies in range
 
-			//FiringSystemRefactor - Start of Modification - DicyCat - Luke Taylor
-			if(inRange.isEmpty() || (currentWaterLevel<=0)){				//Removes the water stream if nothing is in range or no water
-				water.removeStream();
-			}else {													//Adds the water stream if something comes into range
-				//PowerUpAddition_MultipleAttacks_6 - Start of Modification - DicyCat - Luke Taylor
-				playerFire(inRange);
-				water.displayStream();
-				//PowerUpAddition_MultipleAttacks_6 - End of Modification - DicyCat - Luke Taylor
-			}
-			//FiringSystemRefactor - End of Modification - DicyCat - Luke Taylor
+		//FiringSystemRefactor - Start of Modification - DicyCat - Luke Taylor
+		if(inRange.isEmpty() || (currentWaterLevel<=0)){				//Removes the water stream if nothing is in range or no water
+			water.removeStream();
+		}else {													//Adds the water stream if something comes into range
+			//PowerUpAddition_MultipleAttacks_6 - Start of Modification - DicyCat - Luke Taylor
+			playerFire(inRange);
+			water.displayStream();
+			//PowerUpAddition_MultipleAttacks_6 - End of Modification - DicyCat - Luke Taylor
+		}
+		//FiringSystemRefactor - End of Modification - DicyCat - Luke Taylor
 
 
-			//PowerUpAddition_MultipleAttacks_4 - Start of Modification - DicyCat - Luke Taylor
+		//PowerUpAddition_MultipleAttacks_4 - Start of Modification - DicyCat - Luke Taylor
 
-			switch(powerUps[1]) {
+		switch(powerUps[1]) {
 			case ACTIVE:
 				if (secondStreamFiring) {
-					secondStream.displayStream(); // Display stream if it can fire and something is nearby
-				}else{
+					secondStream.displayStream(); // Display stream if it can fire and something is nearby //
+					}else{
 					secondStream.removeStream(); // Remove stream if nothing is nearby
 				}
 				break;
@@ -253,7 +254,7 @@ public class FireTruck extends Entity{
 
 			//PowerUpAddition_MultipleAttacks_4 - End of Modification - DicyCat - Luke Taylor
 
-		}
+
 		// TRUCK_SELECT_CHANGE_7 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 
 		//PowerUpAddition_Regen_1 - Start of Modification - DicyCat - Luke Taylor
