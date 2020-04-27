@@ -41,7 +41,7 @@ public class EntityTest {
         //Test that isAlive returns true
         assertTrue(entityTest.isAlive());
         //Test that getHealthPoints returns the passed variable when instantiated
-        assertEquals(100, entityTest.getCurrentHealthPoints());
+        assertEquals(100, entityTest.getHealthPoints());
         //Test that getGetPosition returns the passed variable when instantiated
         assertEquals(new Vector2(1, 2), entityTest.getPosition());
     }
@@ -57,7 +57,7 @@ public class EntityTest {
     public void applyDamageShouldApplyGivenDamageAndNotKill() {
         entityTest.applyDamage(50);
 
-        assertEquals(50, entityTest.getCurrentHealthPoints());
+        assertEquals(50, entityTest.getHealthPoints());
     }
 
     /**
@@ -71,7 +71,7 @@ public class EntityTest {
     public void applyDamageShouldApplyGivenDamageAndKillWithNegativeHealth() {
         entityTest.applyDamage(110);
 
-        assertEquals(-10, entityTest.getCurrentHealthPoints());
+        assertEquals(-10, entityTest.getHealthPoints());
     }
 
     /**
@@ -85,7 +85,7 @@ public class EntityTest {
     public void applyDamageShouldApplyDamageGivenAndKillWithZeroHealth() {
         entityTest.applyDamage(100);
 
-        assertEquals(0, entityTest.getCurrentHealthPoints());
+        assertEquals(0, entityTest.getHealthPoints());
     }
 
     /**

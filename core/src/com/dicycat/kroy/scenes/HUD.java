@@ -2,14 +2,11 @@ package com.dicycat.kroy.scenes;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.dicycat.kroy.Kroy;
@@ -45,12 +42,6 @@ public class HUD {
 	private Label timerLabel;
 	private Label scoreCountLabel;
 	private Label fortressCountLabel;
-	
-	//PowerUpAddition_HUD_1 - Start of Modification - DicyCat - Luke Taylor
-	private Image currentPowerUpLabel; 
-	private Label powerUpLabel;
-//	private Integer currentPowerUpSelected = ;
-	//PowerUpAddition_HUD_1 - End of Modification - DicyCat - Luke Taylor
 
 	
 	
@@ -78,18 +69,7 @@ public class HUD {
 		fortressCountLabel = new Label(String.format("%01d", 6), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 		// FORTRESS_COUNT_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		
-		//PowerUpAddition_HUD_2 - Start of Modification - DicyCat - Luke Taylor
-		
-		powerUpLabel = new Label("CURRENT POWER UP: ",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-//		currentPowerUpLabel = new Label("0", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-		currentPowerUpLabel = new Image(new TextureRegionDrawable(new Texture("Power1ActiveNot.png")));
-		
-		tableHUD.add(powerUpLabel).expandX().padTop(10);
-		tableHUD.add(currentPowerUpLabel).padTop(10);
-		
-		//PowerUpAddition_HUD_2 - End of Modification - DicyCat - Luke Taylor
-		
-		
+
 		tableHUD.add(timeLabel).expandX().padTop(10);
 		tableHUD.add(timerLabel).expandX().padTop(10);
 		tableHUD.add(scoreLabel).expandX().padTop(10);			// expandX so that all elements take up the same amount of space
@@ -123,13 +103,6 @@ public class HUD {
 		// Updates the count depending on the amount of fortresses still alive
 		fortressCountLabel.setText(String.format("%01d", Kroy.mainGameScreen.getFortressesCount()));
 		// FORTRESS_COUNT_3 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT
-		
-		//PowerUpAddition_HUD_3 - Start of Modification - DicyCat - Luke Taylor
-		
-		currentPowerUpLabel.setDrawable(new TextureRegionDrawable(Kroy.mainGameScreen.getPlayer().getSelectedPowerUpTexture()));
-		
-		//PowerUpAddition_HUD_3 - End of Modification - DicyCat - Luke Taylor
-		
 	}
 
 	public Integer getFinalScore() {
