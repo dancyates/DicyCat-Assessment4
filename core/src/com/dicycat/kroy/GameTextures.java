@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Stores textures for classes to reference.
  * This means multiple of the same sprite use the same reference.
@@ -20,6 +23,9 @@ public class GameTextures {
 	// new selection method and defined the array list which will be used to store them
 	private Texture truck0, truck1, truck2, truck3, ufo, bullet, fireStation, fireStationDead;
 	private ArrayList<Texture> trucks;
+	private HashMap<String, List<Texture>> fortressTextures;
+	private List<String> fortressFileNamesList;
+
 
 	// TRUCK_SELECT_CHANGE_1 - END OF MODIFICATION - NP STUDIOS - LUCY IVATT----
 	// NEW_FORTRESSES_1 - START OF MODIFICATION - NP STUDIOS - Alasdair Pilmore-Bedford ---------------------------
@@ -32,6 +38,47 @@ public class GameTextures {
 			new Texture("york museum dead.png"), new Texture ("YorkRailStationDestoryed.png"),
 			new Texture ("YorkHospitalDeaded.png"), new Texture ("CentralHallDeaded.png")};
 	// NEW_FORTRESSES_1 - END OF MODIFICATION - NP STUDIOS - Alasdair Pilmore-Bedford ---------------------------
+
+
+	// Dan Start
+
+
+	// Creates a HashMap with the texture name as the key and the value as an array of the respective
+	// textures for each fortress.
+	private void generateTextureHashMaps() {
+		List<Texture> textureListCliffordsTower = new ArrayList<>();
+		List<Texture> textureListYorkMinster = new ArrayList<>();
+		List<Texture> textureListYorkMuseum = new ArrayList<>();
+		List<Texture> textureListRailwayStation = new ArrayList<>();
+		List<Texture> textureListYorkHospital = new ArrayList<>();
+		List<Texture> textureListCentralHall = new ArrayList<>();
+		List<List<Texture>> listOfTextureLists = Arrays.asList(textureListCliffordsTower, textureListYorkMinster, textureListYorkMuseum, textureListRailwayStation, textureListYorkHospital, textureListCentralHall);
+		String textureNameOutput = "";
+
+		int count = 0;
+
+		for (List<Texture> textureListLocation : listOfTextureLists) {
+			for (int stageNum = 0; stageNum <= 5; stageNum++) {
+				textureListLocation.add(new Texture(fortressFileNamesList.get(count) + "_stage" + Integer.toString(stageNum) + ".png"));
+			}
+			fortressTextures.put(fortressFileNamesList.get(count), textureListLocation);
+			count++;
+		}
+	};
+
+	public Texture getFortressTextures(String textureListTextureName, int textureListStageNumber) {
+		return fortressTextures.get(textureListTextureName).get(textureListStageNumber);
+	};
+
+	// Dan End
+
+
+	// Dan End
+
+
+
+
+
 
 	private String[] truckAddress = {"fireTruck1.png", "fireTruck2.png", "fireTruck3.png", "fireTruck4.png"};
 
@@ -57,7 +104,21 @@ public class GameTextures {
 		ufo = new Texture("ufo.png");
 		bullet = new Texture("bullet.png");
 		fireStation = new Texture("FireStationTemp.png");
-		fireStationDead = new Texture("FireStationTempDead.png");	
+		fireStationDead = new Texture("FireStationTempDead.png");
+
+
+		// Dan Start
+		fortressTextures = new HashMap<String, List<Texture>>();
+		this.fortressFileNamesList = new ArrayList<String>();
+		fortressFileNamesList.add("cliffords_tower");
+		fortressFileNamesList.add("york_minster");
+		fortressFileNamesList.add("york_museum");
+		fortressFileNamesList.add("railway_station");
+		fortressFileNamesList.add("york_hospital");
+		fortressFileNamesList.add("central_hall");
+
+		generateTextureHashMaps();
+		// Dan End
 	}
 
 	// TRUCK_SELECT_CHANGE_3 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT----
