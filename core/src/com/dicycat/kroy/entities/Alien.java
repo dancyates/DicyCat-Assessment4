@@ -54,9 +54,17 @@ public class Alien extends Entity {
 		setPosition(waypoints[0]); // Sets the starting position of the alien to the first waypoint
 		dispenser = new BulletDispenser(this); // Initialises the bullet dispenser
 		Random random = new Random(); // Creates instance of Random class to give Aliens random damage.
-		dispenser.addPattern(new Pattern(180, 300, 800, 0.1f, 20,
-				1, 0.5f, random.nextInt((20 - 5) + 1) + 5));  // Adds pattern and random
-																							// damage to the bullet dispenser.
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 4; j++) {
+				dispenser.addPattern(new Pattern(j*90, 150, 800, 0.3f, 1,
+						3, 0.3f, random.nextInt((20 - 5) + 1) + 5));  // Adds pattern and random damage to the bullet dispenser.
+			}
+			for (int j = 0; j < 4; j++) {
+				dispenser.addPattern(new Pattern((j*90)+45, 150, 800, 0.3f, 1,
+						3, 0.3f, random.nextInt((20 - 5) + 1) + 5));  // Adds pattern and random damage to the bullet dispenser.
+			}
+		}
+
 		currentWaypoint = 0; // Sets current waypoint as the first waypoint in the array.
 		this.movementCountdown = movementCountdown;
 		speed = 150;

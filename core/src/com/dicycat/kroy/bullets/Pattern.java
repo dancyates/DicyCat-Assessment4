@@ -29,7 +29,7 @@ public class Pattern {
 	 */
 	public Pattern(int degree, int speed, int range, float timeBetweenShots, int patternLength, int multi, float cooldown, int damage) {
 		this.patternDamage = damage;
-		aim = true;
+		aim = false;
 		waitTime = timeBetweenShots;
 		bullets = new Bullet[patternLength][multi];
 		this.cooldown = cooldown;

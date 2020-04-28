@@ -237,7 +237,7 @@ public class GameScreen implements Screen{
 			int timeBetween = 50;
 			for (int patrolNum = 1; patrolNum <= 4; patrolNum++)
 				for (int i = 0; i < 5; i++) {
-					gameObjects.add(new Alien(patrolNum, i * timeBetween, 300));
+					gameObjects.add(new Alien(patrolNum, i * timeBetween, 600));
 				}
 			// PATROLS_4 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT ------------
 

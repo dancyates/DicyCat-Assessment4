@@ -31,7 +31,7 @@ public class Fortress extends Entity {
 	// FORTRESS_HEALTH_2 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
 	// Added health parameter to Fortress constructor and changed it in the call to super from "500" to "health"
 	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage ) { ////
-		super(spawnPos, fortressTexture, size, health, 500);
+		super(spawnPos, fortressTexture, size, health, 800);
 	// FORTRESS_HEALTH_2 - END OF MODIFICATION - NP STUDIOS
 		this.damage = fortressDamage;
 
@@ -40,7 +40,7 @@ public class Fortress extends Entity {
 		// Passed the damage to the Pattern constructors
 
 		dispenser = new BulletDispenser(this);
-		dispenser.addPattern(new Pattern(180, 300, 800, 0.1f, 20, 1, 0.5f, this.getDamage()));
+		dispenser.addPattern(new Pattern(300, 800, 0.1f, 20, 1, 0.5f, this.getDamage()));
 		dispenser.addPattern(new Pattern(100, 500, 0.5f, 8, 5, 0.5f, this.getDamage()));
 		dispenser.addPattern(new Pattern(0, 50, 800, 2f, 3, 36, 4, this.getDamage()));
 		dispenser.addPattern(new Pattern(200, 600, 0.3f, 12, 2, 0.3f, this.getDamage()));
