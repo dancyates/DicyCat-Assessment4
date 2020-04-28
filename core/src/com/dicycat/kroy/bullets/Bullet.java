@@ -87,28 +87,25 @@ public class Bullet extends GameObject {
 		hitbox.x = getCentre().x;
 		hitbox.y = getCentre().y;
 
-		//INTERACTIVITY - START OF MODIFICATION - DICYCAT - Isaac Albiston----
-		for (FireTruck currentTruck : Kroy.mainGameScreen.getTrucks()) {        //iterates through all trucks
-			//Check to see if bullet collides with a truck
-			if (currentTruck.isAlive()) {
-				if (Intersector.overlaps(hitbox, currentTruck.getHitbox())) {
-					// FORTRESS_IMPROVE_1 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE
-					// After 7.5 minutes (half way through game) the damage of fortresses doubles
-					if (HUD.timer > 450) {
-						bulletDamage = bulletDamage * 2;
-					}
-					// FORTRESS_IMPROVE_1 - END OF MODIFICATION - NP STUDIOS
-
-					// FORTRESS_DAMAGE_7 - START OF MODIFICATION - NP STUDIOS
-					currentTruck.applyDamage(bulletDamage);                // - CASSANDRA LILLYSTONE ----
-					// Passed bulletDamage to applyDamage() function, allowing
-					// fortresses to have different damage levels
-					remove = true;
-					// FORTRESS_HEALTH_7 - END OF MODIFICATION - NP STUDIOS
+		//Check to see if bullet collides with the players truck.
+		FireTruck truck = Kroy.mainGameScreen.getPlayer();
+		if (truck.isAlive()) {
+			if(Intersector.overlaps(hitbox, truck.getHitbox())){
+				// FORTRESS_IMPROVE_1 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE
+				// After 7.5 minutes (half way through game) the damage of fortresses doubles
+				if 	(HUD.timer > 450){
+					bulletDamage = bulletDamage * 2;
 				}
+				// FORTRESS_IMPROVE_1 - END OF MODIFICATION - NP STUDIOS
+
+																// FORTRESS_DAMAGE_7 - START OF MODIFICATION - NP STUDIOS
+				truck.applyDamage(bulletDamage);				// - CASSANDRA LILLYSTONE ----
+																// Passed bulletDamage to applyDamage() function, allowing
+																// fortresses to have different damage levels
+				remove = true;									// FORTRESS_HEALTH_7 - END OF MODIFICATION - NP STUDIOS
 			}
 		}
-		//INTERACTIVITY - START OF MODIFICATION - DICYCAT - Isaac Albiston----
+
 	}
 	// CODE_REFACTOR_1 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 	// Deleted unused getter
