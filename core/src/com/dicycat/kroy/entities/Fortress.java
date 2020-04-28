@@ -8,6 +8,8 @@ import com.dicycat.kroy.bullets.BulletDispenser;
 import com.dicycat.kroy.bullets.Pattern;
 import com.dicycat.kroy.misc.StatBar;
 
+import java.util.HashMap;
+
 /**
  * Hostile building which fires at the player when within its radius.
  */
@@ -21,6 +23,9 @@ public class Fortress extends Entity {
 	private int damage; 	// Added a new attribute 'damage'
 	// FORTRESS_DAMAGE_1 - END OF MODIFICATION - NP STUDIOS
 
+	private int fortressNum;
+	private HashMap<Float, Boolean> hpLevels;
+
 	/**
 	 * @param spawnPos
 	 * @param fortressTexture
@@ -30,7 +35,7 @@ public class Fortress extends Entity {
 
 	// FORTRESS_HEALTH_2 - START OF MODIFICATION - NP STUDIOS - CASSANDRA LILLYSTONE ----
 	// Added health parameter to Fortress constructor and changed it in the call to super from "500" to "health"
-	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage ) { ////
+	public Fortress(Vector2 spawnPos, Texture fortressTexture, Texture deadTexture, Vector2 size, int health, int fortressDamage, int fortressNum ) { ////
 		super(spawnPos, fortressTexture, size, health, 800);
 	// FORTRESS_HEALTH_2 - END OF MODIFICATION - NP STUDIOS
 		this.damage = fortressDamage;
@@ -50,6 +55,15 @@ public class Fortress extends Entity {
 		// FORTRESS_HEALTH_3 - END OF MODIFICATION - NP STUDIOS
 
 		this.deadTexture = deadTexture;
+
+		this.fortressNum = fortressNum;
+
+		hpLevels = new HashMap<Float, Boolean>();
+		hpLevels.put(0.8f, false);
+		hpLevels.put(0.6f, false);
+		hpLevels.put(0.4f, false);
+		hpLevels.put(0.2f, false);
+		hpLevels.put(0f, false);
 
 		// END_GAME_FIX_2 - START OF MODIFICATION - NP STUDIOS - LUCY IVATT
 		// Deleted addFortress call
@@ -91,7 +105,52 @@ public class Fortress extends Entity {
 		super.applyDamage(damage);
 		healthBar.setPosition(getCentre().add(0, (getHeight() / 2) + 25));
 		healthBar.setBarDisplay((currentHealthPoints*500)/maxHealthPoints);
+
+		changeFortressTexture(fortressNum);
 	}
+
+	private void changeFortressTexture(int fortressNumber) {
+		switch (fortressNumber) {
+			case 0:
+				changeFortressTextureTo("cliffords_tower");
+				break;
+			case 1:
+				changeFortressTextureTo("york_minster");
+				break;
+			case 2:
+				changeFortressTextureTo("york_museum");
+				break;
+			case 3:
+				changeFortressTextureTo("railway_station");
+				break;
+			case 4:
+				changeFortressTextureTo("york_hospital");
+				break;
+			case 5:
+				changeFortressTextureTo("central_hall");
+				break;
+			default:
+		};
+	};
+
+	private void changeFortressTextureTo(String textureName) {
+		int currentHealth = getCurrentHealthPoints();
+		float healthNormalised = (float)currentHealth/maxHealthPoints;
+
+		if (healthNormalised > 0.8 && healthNormalised <= 1 && !hpLevels.get(0.8f)){
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 0));
+		} else if (healthNormalised > 0.60 && healthNormalised <=  0.8 && !hpLevels.get(0.6f)) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 1));
+		} else if (healthNormalised > 0.40 && healthNormalised <= 0.60 && !hpLevels.get(0.4f)) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 2));
+		} else if (healthNormalised > 0.20 && healthNormalised <= 0.40 && !hpLevels.get(0.2f)) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 3));
+		} else if (healthNormalised > 0 && healthNormalised <= 0.20 && !hpLevels.get(0f)) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 4));
+		} else if (healthNormalised == 0) {
+			sprite.setTexture(Kroy.mainGameScreen.textures.getFortressTextures(textureName, 5));
+		};
+	};
 
 	/**
 	 * Updates the dispenser associated with the fortress and adds bullets to the mainGameScreen
